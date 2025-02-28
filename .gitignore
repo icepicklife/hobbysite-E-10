@@ -1,5 +1,0 @@
-.env
-.midt_env
-*.pyc
-**/__pycache__/
-.gitignore
