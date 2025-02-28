@@ -19,5 +19,6 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ("-date_created_on")
 
 
-
+admin.site.register(Commission, CommissionAdmin)
+admin.site.register(Comment, CommentAdmin)
 # Register your models here.
