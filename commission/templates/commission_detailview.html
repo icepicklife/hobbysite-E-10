@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Commission
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ commission.title }}
+    </h1>
+    <p>
+        {{ commission.description }}
+    </p>
+    <p>
+
+        <strong>
+            People Required:
+        </strong>
+
+        {{ commission.people_req }}
+
+    </p>
+    <p>
+
+        <strong>
+            Created on:
+        </strong>
+
+        {{ commission.date_created_on }}
+
+    </p>
+    <p>
+        <strong>
+            Last Updated:
+        </strong>
+
+        {{ commission.date_updated_on }}
+    </p>
+{% end block %}
