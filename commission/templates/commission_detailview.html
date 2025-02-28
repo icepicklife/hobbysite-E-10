@@ -11,7 +11,9 @@
         {{ commission.title }}
     </h1>
     <p>
-        {{ commission.description }}
+        <em>
+            {{ commission.description }}
+        </em>
     </p>
     <p>
 
@@ -38,4 +40,23 @@
 
         {{ commission.date_updated_on }}
     </p>
+
+    <h2>
+        Comments
+    </h2>
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>
+                        {{ comment.date_created_on|date:"Y-m-d H:i"}}
+                    </strong>: {{ comment.entry }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            No comments yet.
+        </p>
+    {% endif %}
 {% endblock %}
