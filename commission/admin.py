@@ -16,7 +16,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('commission', 'entry', 'date_created_on', 'date_updated_on')
     search_fields =('title', 'description')
     list_filter = ('date_created_on', 'date_updated_on')
-    ordering = ("-date_created_on")
+    ordering = ('-date_created_on',)
 
 
 admin.site.register(Commission, CommissionAdmin)
