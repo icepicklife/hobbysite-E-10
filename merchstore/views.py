@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from .models import Product
+from .models import Product, ProductType
 
 
 class ProductListView(ListView):
-    model = Product
+    model = ProductType
     template_name = "product_list.html"
+    context_object_name = "product_types"
+
+    def get_queryset(self):
+        return ProductType.objects.prefetch_related("products").all()
 
 
 class ProductDetailView(DetailView):
@@ -15,13 +19,16 @@ class ProductDetailView(DetailView):
 
 
 def product_list(request):
-    products = Product.objects.all()
-    ctx = {"products": products}
+    product_types = (
+        ProductType.objects.prefetch_related("products")
+        .all()
+    )
+    ctx = {"product_types": product_types}
 
     return render(request, "product_list.html", ctx)
 
 
-def recipe_detail(request, pk):
+def product_detail(request, pk):
     ctx = {"product": Product.objects.get(pk=pk)}
 
     return render(request, "product_detail.html", ctx)
