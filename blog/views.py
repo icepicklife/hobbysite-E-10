@@ -7,7 +7,7 @@ from . import models
 
 
 def index(request):
-    return HttpResponse("Landing page")
+    return HttpResponse("Landing page for blog app")
 
 
 def article_list(request):
