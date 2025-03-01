@@ -5,13 +5,13 @@ class Commission(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
-    people_req = models.BigIntegerField()
-    date_created_on = models.DateTimeField(auto_now_add=True)
-    date_updated_on = models.DateTimeField(auto_now=True)
+    people_required = models.BigIntegerField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 
     class Meta:
-        ordering = ["date_created_on"]
+        ordering = ["created_on"]
     
 
     def __str__(self):
@@ -31,16 +31,13 @@ class Comment(models.Model):
     )
 
     entry = models.TextField()
-    date_created_on = models.DateTimeField(auto_now_add=True)
-    date_updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     
     class Meta:
-        ordering = ["-date_created_on"]
+        ordering = ["-created_on"]
 
 
     def __str__(self):
-        return f"Comment on {self.commission.title}"
-
-# Create your models here.
-
+        return f"A comment on {self.commission.title}"

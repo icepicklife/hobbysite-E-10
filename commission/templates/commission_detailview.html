@@ -21,7 +21,7 @@
             People Required:
         </strong>
 
-        {{ commission.people_req }}
+        {{ commission.people_required }}
 
     </p>
     <p>
@@ -30,7 +30,7 @@
             Created on:
         </strong>
 
-        {{ commission.date_created_on }}
+        {{ commission.created_on }}
 
     </p>
     <p>
@@ -38,7 +38,7 @@
             Last Updated:
         </strong>
 
-        {{ commission.date_updated_on }}
+        {{ commission.updated_on }}
     </p>
 
     <h2>
@@ -49,7 +49,7 @@
             {% for comment in comments %}
                 <li>
                     <strong>
-                        {{ comment.date_created_on|date:"Y-m-d H:i"}}
+                        {{ comment.created_on|date:"Y-m-d H:i"}}
                     </strong>: {{ comment.entry }}
                 </li>
             {% endfor %}
