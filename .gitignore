@@ -1,5 +1,5 @@
 .env
-.venv
-*.pyc
-**/__pycache__/
+myenv/
+*/*.pyc
+**/__pycache__
 .gitignore
