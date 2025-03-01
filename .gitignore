@@ -1,6 +1,0 @@
-.env
-.midt_env
-*.pyc
-**/__pycache__/
-*.sqlite3
-.gitignore
