@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ article.title }}
+    </h1>
+
+    
+
+    <p>
+        {{ article.entry }}
+    </p>
+
+    <h4>
+        <ul><li>
+            <a href="../../articles/"> Go back to Article List</a>
+        </ul></li>
+    </h4>
+    <h6>
+        <ul>
+            <li> Created on {{ article.created_on }} </li>
+            <li> Last updated {{ article.updated_on }} </li>
+        </ul>
+    </h6>
+    
+    
+{% endblock %}

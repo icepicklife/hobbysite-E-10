@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ post.title }}
+    </h1>
+    
+    <p>
+        {{ post.entry }}
+    </p>
+
+    <h4>
+        <ul><li>
+            <a href="../../threads/"> Go back to Thread List</a>
+        </ul></li>
+    </h4>
+    
+    
+{% endblock %}

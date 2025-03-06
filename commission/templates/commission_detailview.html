@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Commission
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ commission.title }}
+    </h1>
+    <p>
+        <em>
+            {{ commission.description }}
+        </em>
+    </p>
+    <p>
+
+        <strong>
+            People Required:
+        </strong>
+
+        {{ commission.people_required }}
+
+    </p>
+    <p>
+
+        <strong>
+            Created on:
+        </strong>
+
+        {{ commission.created_on }}
+
+    </p>
+    <p>
+        <strong>
+            Last Updated:
+        </strong>
+
+        {{ commission.updated_on }}
+    </p>
+
+    <h2>
+        Comments
+    </h2>
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>
+                        {{ comment.created_on|date:"Y-m-d H:i"}}
+                    </strong>: {{ comment.entry }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            No comments yet.
+        </p>
+    {% endif %}
+{% endblock %}
