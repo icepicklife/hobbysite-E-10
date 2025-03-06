@@ -13,7 +13,7 @@ Article List
     <ul>
         {% for article in object_list %}
         <li>
-            <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a> - {{ article.category}}
+            <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a> ({{ article.category}})
         </li>
         {% endfor %}
     </ul>
