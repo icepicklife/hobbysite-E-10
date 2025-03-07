@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATICFILES_DIRS = ["C:\\Users\\paige\\Documents\\GitHub\\hobbysite-E-10\\static"]
 
 # Application definition
 

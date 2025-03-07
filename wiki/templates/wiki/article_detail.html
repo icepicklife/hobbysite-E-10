@@ -8,12 +8,13 @@
 
 {% block content %}
     <h1>{{ article.title }}</h1>
-    <p>Category: {{ article.category }}</p>
-    <p>Created on: {{ article.created_on }}</p>
-    <p>Updated on: {{ article.updated_on }}</p>
-    <div>
-        <p>Details:</p>
-        <p>{{ article.entry }}</p>
+    <p><b>Article:</b></p>
+    <p>{{ article.entry }}</p>
+    <p><b>Details:</b></p>
+    <div class="details">
+        <p>Category: {{ article.category }}</p>
+        <p>Created on: {{ article.created_on }}</p>
+        <p>Updated on: {{ article.updated_on }}</p>
     </div>
-    
+    <button class="back-button" onclick="window.history.back()">Back</button>
 {% endblock %}

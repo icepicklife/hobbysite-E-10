@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,7 +7,8 @@
         <title>
             {% block title %}Default Title{% endblock %}    
         </title>
-        {% block styles %}{% endblock %}
+        <link rel="stylesheet" type="text/css" href="{%static 'css/styles.css' %}">
+        {% block styles %}{% endblock %} <!-- oh this is for internal CSS pala -->
     </head>
     <body>
         {% block content %}{% endblock %}
