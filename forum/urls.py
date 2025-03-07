@@ -1,10 +1,9 @@
 from django.urls import path
-from . import views
+from .views import PostDetailView, PostListView
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("threads/", views.PostListView.as_view(), name="post_list"),
-    path("thread/<int:pk>/", views.PostDetailView.as_view(), name="post_view"),
+    path('threads/', PostListView.as_view(), name='post-list'),
+    path('thread/<int:pk>/', PostDetailView.as_view(), name='post-detail') 
 ]
 
 app_name = "forum"

@@ -16,17 +16,17 @@ class PostCategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("forum:category_detail", args=[str(self.pk)])
-
-
+        return reverse('forum:post-list', args=[str(self.pk)])
+    
+    
 class Post(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
         PostCategory, on_delete=models.SET_NULL, null=True, related_name="post"
     )
     entry = models.TextField()
-    created_on = models.DateTimeField(auto_now=True)
-    updated_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_on"]
@@ -35,4 +35,5 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("forum:post_view", args=[str(self.pk)])
+        return reverse('forum:post-detail', args=[str(self.pk)])
+
