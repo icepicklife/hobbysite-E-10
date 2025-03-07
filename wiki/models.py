@@ -20,7 +20,8 @@ class Article(models.Model):
     updated_on = models.DateTimeField(auto_now=True)  
 
     class Meta:
-        ordering = ['-created_on']  
+     ordering = ['category__name', 'title']
+
 
     def __str__(self):
         return self.title
