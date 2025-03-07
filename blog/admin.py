@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Article, ArticleCategory
 
-# Register your models here.
 
 class ArticleLine(admin.TabularInline):
     model = Article

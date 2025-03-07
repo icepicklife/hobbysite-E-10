@@ -32,3 +32,4 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = models.Post
     template_name = "post_view.html"
+    

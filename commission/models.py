@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 class Commission(models.Model):
 
     title = models.CharField(max_length=255)
@@ -8,7 +9,6 @@ class Commission(models.Model):
     people_required = models.BigIntegerField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         ordering = ["created_on"]
