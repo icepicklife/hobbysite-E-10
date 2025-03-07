@@ -24,4 +24,5 @@ urlpatterns = [
     path("", include("commission.urls", namespace="commission")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("forum/", include("forum.urls", namespace="forum")),
+    path("wiki/", include("wiki.urls")),
 ]
