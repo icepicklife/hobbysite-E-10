@@ -17,8 +17,8 @@ class PostCategory(models.Model):
 
     def get_absolute_url(self):
         return reverse('forum:post-list', args=[str(self.pk)])
-    
-    
+
+
 class Post(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
@@ -36,4 +36,3 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('forum:post-detail', args=[str(self.pk)])
-
