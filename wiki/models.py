@@ -25,6 +25,5 @@ class Article(models.Model):
     class Meta:
         ordering = ["category__name", "-created_on"]
 
-
     def __str__(self):
         return self.title
