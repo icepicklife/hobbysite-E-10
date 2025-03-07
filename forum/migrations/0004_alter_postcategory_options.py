@@ -6,12 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("forum", "0003_alter_postcategory_options_alter_post_created_on_and_more"),
+        ("forum",
+         "0003_alter_postcategory_options_alter_post_created_on_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
             name="postcategory",
-            options={"ordering": ["name"], "verbose_name_plural": "Post Categories"},
+            options={"ordering": ["name"],
+                     "verbose_name_plural": "Post Categories"},
         ),
     ]

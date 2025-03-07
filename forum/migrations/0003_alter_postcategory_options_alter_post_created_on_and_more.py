@@ -12,7 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name="postcategory",
-            options={"ordering": ["name"], "verbose_name_plural": "Post Category "},
+            options={"ordering": ["name"],
+                     "verbose_name_plural": "Post Category "},
         ),
         migrations.AlterField(
             model_name="post",

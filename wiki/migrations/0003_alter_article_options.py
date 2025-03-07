@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wiki', '0002_alter_articlecategory_options'),
+        ("wiki", "0002_alter_articlecategory_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='article',
-            options={'ordering': ['category__name', 'title']},
+            name="article",
+            options={"ordering": ["category__name", "title"]},
         ),
     ]

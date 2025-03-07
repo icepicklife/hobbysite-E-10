@@ -22,7 +22,8 @@ class ArticleCategory(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
-        ArticleCategory, on_delete=models.SET_NULL, null=True, related_name="article"
+        ArticleCategory, on_delete=models.SET_NULL,
+        null=True, related_name="article"
     )
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
