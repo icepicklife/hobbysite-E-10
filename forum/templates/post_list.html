@@ -8,13 +8,26 @@ Thread List
 
 {% block content %}
     <h1>
-        Thread List
+        Forum Threads
     </h1>
-    <ul>
-        {% for post in object_list %}
-        <li>
-            <a href='{{ post.get_absolute_url }}'>{{ post.title }}</a> - {{ post.category}}
-        </li>
+
+    {% for category in thread_lists %}
+        <h2>{{ category.name }}</h2>
+        <ul>
+            {% for post in category.post.all %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </li>
+            {% empty %}
+                <li>No threads available under this category.</li>
+            {% endfor %}
+        </ul>
+
         {% endfor %}
-    </ul>
 {% endblock %}
+
+
+
+
+
+
