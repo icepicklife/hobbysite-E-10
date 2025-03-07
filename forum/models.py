@@ -16,7 +16,7 @@ class PostCategory(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('forum:category_detail', args=[str(self.pk)])
+        return reverse('forum:post-list', args=[str(self.pk)])
     
     
 class Post(models.Model):
@@ -38,5 +38,5 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('forum:post_view', args=[str(self.pk)])
+        return reverse('forum:post-detail', args=[str(self.pk)])
 
