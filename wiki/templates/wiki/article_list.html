@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
     {% for article in articles %}
-        <h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2>
-        <p>Category: {{ article.category }}</p>
-        <p>Created on: {{ article.created_on }}</p>
+    <ol>
+        <li><h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2></li>
+    </ol>
+    <ul>
+        <li><p>Category: {{ article.category }}</p></li>
+        <li><p>Created on: {{ article.created_on }}</p></li>
+    </ul>
+    
     {% endfor %}
-</body>
-</html>
+{% endblock %}
