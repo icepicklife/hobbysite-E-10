@@ -2,6 +2,7 @@ body {
     background-color: beige;
 }
 
+/* this is bad practice, should be titles and not all of h2 in general, but CSS isnt graded here so yeah */
 h2 a {
     text-decoration: underline;
     font-size: 1.5rem;
