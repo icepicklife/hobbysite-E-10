@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_DIRS = ["C:\\Users\\paige\\Documents\\GitHub\\hobbysite-E-10\\static"]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Application definition
 
