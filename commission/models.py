@@ -12,33 +12,26 @@ class Commission(models.Model):
 
     class Meta:
         ordering = ["created_on"]
-    
 
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
-        return reverse('commission:commissions_detail', args=[self.pk])
+        return reverse("commission:commissions_detail", args=[self.pk])
 
 
 class Comment(models.Model):
 
     commission = models.ForeignKey(
-        
-        Commission,
-        on_delete=models.CASCADE,
-        related_name="comments"
+        Commission, on_delete=models.CASCADE, related_name="comments"
     )
 
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    
     class Meta:
         ordering = ["-created_on"]
 
-
     def __str__(self):
         return f"A comment on {self.commission.title}"
-        

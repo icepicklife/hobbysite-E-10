@@ -19,10 +19,7 @@ class ProductDetailView(DetailView):
 
 
 def product_list(request):
-    product_types = (
-        ProductType.objects.prefetch_related("products")
-        .all()
-    )
+    product_types = ProductType.objects.prefetch_related("products").all()
     ctx = {"product_types": product_types}
 
     return render(request, "product_list.html", ctx)

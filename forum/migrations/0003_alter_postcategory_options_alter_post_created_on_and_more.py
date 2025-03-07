@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('forum', '0002_alter_postcategory_options'),
+        ("forum", "0002_alter_postcategory_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='postcategory',
-            options={'ordering': ['name'], 'verbose_name_plural': 'Post Category '},
+            name="postcategory",
+            options={"ordering": ["name"], "verbose_name_plural": "Post Category "},
         ),
         migrations.AlterField(
-            model_name='post',
-            name='created_on',
+            model_name="post",
+            name="created_on",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='updated_on',
+            model_name="post",
+            name="updated_on",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

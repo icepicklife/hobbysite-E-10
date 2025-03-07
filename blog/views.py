@@ -12,21 +12,21 @@ def index(request):
 
 def article_list(request):
     article_list = models.Article.objects.all()
-    ctx = {'article': article_list}
+    ctx = {"article": article_list}
 
     return render(request, "blog/article_list.html", ctx)
 
 
 def article(request, pk):
     article = models.Article.objects.get(pk=pk)
-    ctx = {'article': article}
+    ctx = {"article": article}
 
-    return render(request, 'blog/article_view.html', ctx)
+    return render(request, "blog/article_view.html", ctx)
 
 
 class ArticleListView(ListView):
     model = models.Article
-    template_name = 'blog/article_list.html'
+    template_name = "blog/article_list.html"
 
 
 class ArticleDetailView(DetailView):

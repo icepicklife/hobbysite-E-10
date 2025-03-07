@@ -6,41 +6,41 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commission', '0001_initial'),
+        ("commission", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ['-created_on']},
+            name="comment",
+            options={"ordering": ["-created_on"]},
         ),
         migrations.AlterModelOptions(
-            name='commission',
-            options={'ordering': ['created_on']},
+            name="commission",
+            options={"ordering": ["created_on"]},
         ),
         migrations.RenameField(
-            model_name='comment',
-            old_name='date_created_on',
-            new_name='created_on',
+            model_name="comment",
+            old_name="date_created_on",
+            new_name="created_on",
         ),
         migrations.RenameField(
-            model_name='comment',
-            old_name='date_updated_on',
-            new_name='updated_on',
+            model_name="comment",
+            old_name="date_updated_on",
+            new_name="updated_on",
         ),
         migrations.RenameField(
-            model_name='commission',
-            old_name='date_created_on',
-            new_name='created_on',
+            model_name="commission",
+            old_name="date_created_on",
+            new_name="created_on",
         ),
         migrations.RenameField(
-            model_name='commission',
-            old_name='people_req',
-            new_name='people_required',
+            model_name="commission",
+            old_name="people_req",
+            new_name="people_required",
         ),
         migrations.RenameField(
-            model_name='commission',
-            old_name='date_updated_on',
-            new_name='updated_on',
+            model_name="commission",
+            old_name="date_updated_on",
+            new_name="updated_on",
         ),
     ]

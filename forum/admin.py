@@ -12,7 +12,7 @@ class PostCategoryAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "created_on", "updated_on") 
+    list_display = ("title", "category", "created_on", "updated_on")
     list_filter = ("category", "created_on")
 
 

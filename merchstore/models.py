@@ -17,10 +17,7 @@ class ProductType(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     product_type = models.ForeignKey(
-        ProductType,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="products"
+        ProductType, on_delete=models.SET_NULL, null=True, related_name="products"
     )
     description = models.TextField()
     price = models.DecimalField(max_digits=20, decimal_places=2)

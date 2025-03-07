@@ -12,24 +12,23 @@ def index(request):
 
 def thread_list(request):
     thread_list = models.Post.objects.all()
-    ctx = {'thread': thread_list}
+    ctx = {"thread": thread_list}
 
     return render(request, "forum/post_list.html", ctx)
 
 
 def thread(request, pk):
     thread = models.Post.objects.get(pk=pk)
-    ctx = {'thread': thread}
+    ctx = {"thread": thread}
 
-    return render(request, 'forum/post_view.html', ctx)
+    return render(request, "forum/post_view.html", ctx)
 
 
 class PostListView(ListView):
     model = models.Post
-    template_name = 'post_list.html'
+    template_name = "post_list.html"
 
 
 class PostDetailView(DetailView):
     model = models.Post
     template_name = "post_view.html"
-    
