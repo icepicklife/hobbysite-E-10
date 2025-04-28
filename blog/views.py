@@ -18,6 +18,37 @@ class ArticleListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        if self.request.user.is_authenticated:
+            user_articles = self.get_queryset().filter(
+                author=self.request.user).order_by("-created_on")
+            all_articles = self.get_queryset().exclude(
+                author=self.request.user).order_by("category__name","title")
+            
+            articles_by_category = {}
+            
+            for article in all_articles:
+                if article.category.name not in articles_by_category:
+                    articles_by_category[article.category.name] = []
+                articles_by_category[article.category.name].append(article)
+            
+            context['user_articles'] = user_articles
+            context['articles_by_category'] = articles_by_category
+            context['create_article_url'] = reverse_lazy('blog:article_create')
+        else:
+            articles_by_category = {}
+            all_articles = self.get_queryset().order_by('category')
+
+            for article in all_articles:
+                if article.category.name not in articles_by_category:
+                    articles_by_category[article.category.name] = []
+                articles_by_category[article.category.name].append(article)
+            
+            context['articles_by_category'] = articles_by_category
+            context['create_article_url'] = reverse_lazy('blog:article_create')
+
+        
+        return context
+
 
 class ArticleDetailView(DetailView):
     model = models.Article
