@@ -54,6 +54,9 @@ class ArticleDetailView(DetailView):
     model = models.Article
     template_name = "blog/article_view.html"
 
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
 
 def index(request):
     return HttpResponse("Landing page for blog app")
