@@ -18,3 +18,6 @@ class ArticleAdmin(admin.ModelAdmin):
 
 admin.site.register(ArticleCategory, ArticleCategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
+
+
+#test
