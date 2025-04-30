@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import models
 
 
@@ -56,6 +56,14 @@ class ArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+    
+
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    x = 1
+
+
+class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    x = 1
 
 
 def index(request):
