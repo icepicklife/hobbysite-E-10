@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import models
-
+from . import forms
 
 class ArticleListView(ListView):
     model = models.Article
