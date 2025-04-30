@@ -6,57 +6,36 @@
     Commission
 {% endblock %}
 
+<h1>{{ commission.title }}</h1>
+<p>Status: {{ commission.status }}</p>
+<p>{{ commission.description }}</p>
+
 {% block content %}
-    <h1>
-        {{ commission.title }}
-    </h1>
-    <p>
-        <em>
-            {{ commission.description }}
-        </em>
-    </p>
-    <p>
-
-        <strong>
-            People Required:
-        </strong>
-
-        {{ commission.people_required }}
-
-    </p>
-    <p>
-
-        <strong>
-            Created on:
-        </strong>
-
-        {{ commission.created_on }}
-
-    </p>
-    <p>
-        <strong>
-            Last Updated:
-        </strong>
-
-        {{ commission.updated_on }}
-    </p>
-
     <h2>
-        Comments
+        Jobs Needed
     </h2>
-    {% if comments %}
-        <ul>
-            {% for comment in comments %}
-                <li>
-                    <strong>
-                        {{ comment.created_on|date:"Y-m-d H:i"}}
-                    </strong>: {{ comment.entry }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>
-            No comments yet.
-        </p>
+    <ul>
+        {% for job in jobs %}
+            <li>
+                {{ job.role }} - {{ job.manpower_required }} required
+                ({{ job.accepted_count }} accepted)
+                {% if user.is_authenticated and job.accepted_count < job.manpower_required %}
+
+                    <form action="{% url 'job-apply' %}" method="post">
+                        {% csrf_token %}
+                        {{ job_application_form.as_p }}
+                        <input type="hidden" name="job" value="{{ job.pk }}">
+                        <button type="submit">Apply to Job</button>
+                    </form>
+                    
+                {% else %}
+                    <span>Applications closed</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if is_owner %}
+        <a href="{% url 'commission-update' commission.pk %}" class="btn btn-secondary">Edit Commission</a>
     {% endif %}
 {% endblock %}

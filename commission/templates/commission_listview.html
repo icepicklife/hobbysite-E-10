@@ -8,15 +8,52 @@
 
 {% block content %}
     <h1>
-        List of Commissions
+        All Commissions
     </h1>
     <ul>
-        {% for commission in object_list %}
+        {% for commission in commissions %}
             <li>
-                <a href="{{ commission.get_absolute_url }}">
-                    {{ commission.title }}
-                </a>
+                <a href="{% url 'commission-detail' commission.pk %}">{{ commission.title }}</a> - {{ commission.status }} ({{ commission.created_on }})
+            </li>
+        {% empty %}
+            <li>
+                No commissions found.
             </li>
         {% endfor %}
     </ul>
+
+    {% if user.is_authenticated %}
+
+        <h2>
+            Your Commissions
+        </h2>
+        <ul>
+            {% for commission in user_commissions %}
+                <li>
+                    <a href="{% url 'commission-detail' commission.pk %}">{{ commission.title }}</a>
+                </li>
+            {% empty %}
+            <li>
+                You haven't created any commissions.
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h2>
+            Commissions You Applied To
+        </h2>
+        <ul>
+            {% for commission in applied_commissions %}
+            <li>
+                <a href="{% url 'commission-detail' commission.pk %}">{{ commission.title }}</a>
+            </li>
+            {% empty %}
+            <li>
+                You haven't applied to any commissions.
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'commission-create' %}" class="btn btn-primary">Create New Commission</a>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Commission
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if form.instance.pk %}Edit{% else %}Create{% endif %} Commission
+    </h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+{% endblock %}
