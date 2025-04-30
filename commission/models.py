@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from user_management.models import Profile
 
@@ -14,20 +15,17 @@ class Commission(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     description = models.TextField()
-    people_required = models.BigIntegerField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, choices=STATUS_STATES, default='Open')
+    created_on = models.DateTimeField(auto_now_add=True,)
+    updated_on = models.DateTimeField(auto_now=True,)
 
     class Meta:
         ordering = ["created_on"]
 
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse("commission:commissions_detail", args=[self.pk])
 
 
 class Job(models.Model):
@@ -61,7 +59,7 @@ class JobApplication(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_STATES, default='Pending')
-    applied_on = models.DateTimeField(auto_now_add=True)
+    applied_on = models.DateTimeField(auto_now_add=True,)
 
     
     class Meta:
