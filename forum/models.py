@@ -8,6 +8,8 @@ class PostCategory(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
 
+#JARENPOGI
+
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "Post Categories"
