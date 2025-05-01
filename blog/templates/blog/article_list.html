@@ -10,11 +10,44 @@ Article List
     <h1>
         Article List
     </h1>
+    
+    {% if user.is_authenticated %}
+        <h2>
+            Your Articles
+        </h2>
+    
+        {% if user_articles %}
+            <ul>
+                {% for article in user_articles %}
+                <li>
+                    <a href="{{ article.get_absolute_url }}"> {{ article.title }}</a> - ({{ article.category }})
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't written any articles.</p>
+        {% endif %}
+
+    {% endif %}
+
+    <h2>
+        Articles by Category
+    </h2>
+    {% for category, articles in articles_by_category.items %}
+    <h3>
+        {{ category }}
+    </h3>
     <ul>
-        {% for article in object_list %}
+        {% for article in articles %}
         <li>
-            <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a> ({{ article.category}})
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
         </li>
         {% endfor %}
     </ul>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <p><a href="{{ create_article_url }}">Create New Article</a></p>
+    {% endif %}
+
 {% endblock %}
