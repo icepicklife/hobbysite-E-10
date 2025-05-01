@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Product Types
+{% endblock %}
+
+{% block content %}
+    <h1>Browse by Product Type</h1>
+
+    {% for product_type in product_types %}
+        <section style="margin-bottom: 2em;">
+            <h2>{{ product_type.name }}</h2>
+            <p>{{ product_type.description }}</p>
+
+            {% if product_type.products.exists %}
+                <ul>
+                    {% for product in product_type.products.all %}
+                        <li>
+                            <a href="{% url 'merchstore:product-detail' product.pk %}">
+                                {{ product.name }} - ${{ product.price }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No products available under this type.</p>
+            {% endif %}
+        </section>
+    {% endfor %}
+{% endblock %}

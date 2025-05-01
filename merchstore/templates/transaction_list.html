@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Your Product Transactions
+{% endblock %}
+
+{% block content %}
+    <h1>Transactions for Your Products</h1>
+
+    {% if transactions %}
+        <ul>
+            {% for transaction in transactions %}
+                <li>
+                    <strong>Product:</strong> {{ transaction.product.name }}<br>
+                    <strong>Buyer:</strong> {{ transaction.buyer.username }}<br>
+                    <strong>Amount:</strong> {{ transaction.amount }}<br>
+                    <strong>Status:</strong> {{ transaction.status }}<br>
+                    <strong>Date:</strong> {{ transaction.created_on|date:"F j, Y, g:i a" }}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+
+    <p><a href="{% url 'merchstore:product-list' %}">Back to Products</a></p>
+{% endblock %}

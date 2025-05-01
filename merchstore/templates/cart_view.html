@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Your Cart
+{% endblock %}
+
+{% block content %}
+    <h1>Your Cart</h1>
+
+    {% if transactions %}
+        {% regroup transactions by product.owner as seller_groups %}
+
+        {% for group in seller_groups %}
+            <h2>Seller: {{ group.grouper.username }}</h2>
+            <ul>
+                {% for transaction in group.list %}
+                    <li>
+                        {{ transaction.product.name }} —
+                        Amount: {{ transaction.amount }} —
+                        Status: {{ transaction.status }} —
+                        Price per unit: ${{ transaction.product.price }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+    <p><a href="{% url 'merchstore:product-list' %}">Continue Shopping</a></p>
+{% endblock %}

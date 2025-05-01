@@ -1,24 +1,53 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %}
-    Merchandise Store
+    All Products
 {% endblock %}
 
 {% block content %}
-    <h1>Product List</h1>
+    <h1>Merchandise Store</h1>
 
-    {% for product_type in product_types %}
-        <h2>{{ product_type.name }}</h2>
-        <ul>
-            {% for product in product_type.products.all %}
-                <li>
-                    <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                </li>
-            {% empty %}
-                <li>No products available under this category.</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+    {% if user.is_authenticated %}
+        <section>
+            <h2>Your Products</h2>
+            {% if user_products %}
+                <ul>
+                    {% for product in user_products %}
+                        <li>
+                            <a href="{% url 'merchstore:product-detail' product.pk %}">
+                                {{ product.name }} - ${{ product.price }}
+                            </a>
+                            <a href="{% url 'merchstore:product-update' product.pk %}">(Edit)</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't listed any products yet.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    <section style="margin-top: 2em;">
+        <h2>All Other Products</h2>
+        {% if all_products %}
+            <ul>
+                {% for product in all_products %}
+                    <li>
+                        <a href="{% url 'merchstore:product-detail' product.pk %}">
+                            {{ product.name }} - ${{ product.price }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No products from other users.</p>
+        {% endif %}
+    </section>
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'merchstore:product-create' %}">Add a new product</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to add a product.</p>
+    {% endif %}
 {% endblock %}
