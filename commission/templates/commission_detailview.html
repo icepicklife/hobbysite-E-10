@@ -1,41 +1,36 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-{% block title %}
-    Commission
-{% endblock %}
-
-<h1>{{ commission.title }}</h1>
-<p>Status: {{ commission.status }}</p>
-<p>{{ commission.description }}</p>
+{% block title %}Commission Details{% endblock %}
 
 {% block content %}
-    <h2>
-        Jobs Needed
-    </h2>
-    <ul>
-        {% for job in jobs %}
-            <li>
-                {{ job.role }} - {{ job.manpower_required }} required
-                ({{ job.accepted_count }} accepted)
-                {% if user.is_authenticated and job.accepted_count < job.manpower_required %}
+<h1>{{ object.title }}</h1>
+<p><strong>Status:</strong> {{ object.status }}</p>
+<p><strong>Description:</strong> {{ object.description }}</p>
+<p><strong>Created On:</strong> {{ object.created_on }}</p>
+<p><strong>Updated On:</strong> {{ object.updated_on }}</p>
 
-                    <form action="{% url 'job-apply' %}" method="post">
-                        {% csrf_token %}
-                        {{ job_application_form.as_p }}
-                        <input type="hidden" name="job" value="{{ job.pk }}">
-                        <button type="submit">Apply to Job</button>
-                    </form>
-                    
-                {% else %}
-                    <span>Applications closed</span>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+{% if is_owner %}
+    <p><a href="{% url 'commission:commission_edit' object.pk %}">Edit Commission</a></p>
+{% endif %}
 
-    {% if is_owner %}
-        <a href="{% url 'commission-update' commission.pk %}" class="btn btn-secondary">Edit Commission</a>
-    {% endif %}
+<h2>Jobs</h2>
+<ul>
+    {% for job, open_slots, can_apply in manpower_info %}
+        <li>
+            <strong>{{ job.role }}</strong> — {{ job.status }}<br>
+            Required: {{ job.manpower_required }} | Open: {{ open_slots }}
+            {% if user.is_authenticated and can_apply %}
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    {{ application_form.as_p }}
+                    <input type="hidden" name="job_id" value="{{ job.id }}">
+                    <button type="submit">Apply to Job</button>
+                </form>
+            {% elif user.is_authenticated %}
+                <button disabled>Cannot Apply</button>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}

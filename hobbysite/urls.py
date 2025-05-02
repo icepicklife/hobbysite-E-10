@@ -23,7 +23,7 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("merchstore.urls", namespace="merchstore")),
-    path("", include("commission.urls", namespace="commission")),
+    path("commissions/", include("commission.urls", namespace="commission")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("forum/", include("forum.urls", namespace="forum")),
     path("wiki/", include("wiki.urls")),
