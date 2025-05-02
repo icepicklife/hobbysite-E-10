@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>Article List of Group 10 Online Wiki:</h1>
+    {% for article in articles %}
+    <h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2>
+    <ul>
+        <li><p>Category: {{ article.category }}</p></li>
+    </ul>
+    {% endfor %}
+{% endblock %}

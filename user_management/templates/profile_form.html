@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <nav>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <form action="{% url 'login' %}" method="get">
+                <button type="submit">Login</button>
+            </form>
+        {% endif %}
+    </nav>
+  <h2>Update Your Profile</h2>
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save</button>
+  </form>
+{% endblock %}

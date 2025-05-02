@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Thread List
+{% endblock %}
+
+{% block content %}
+    <h1>
+        Forum Threads
+    </h1>
+
+    {% for category in thread_lists %}
+        <h2>{{ category.name }}</h2>
+        <ul>
+            {% for post in category.post.all %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </li>
+            {% empty %}
+                <li>No threads available under this category.</li>
+            {% endfor %}
+        </ul>
+
+        {% endfor %}
+{% endblock %}
+
+
+
+
+
+
