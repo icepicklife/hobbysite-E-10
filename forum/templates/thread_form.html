@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{% if object.pk %}
+    Update Thread
+{% else %}
+    Create Thread
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<h1>
+    {% if object.pk %}
+        Update Thread
+    {% else %}
+        Create New Thread
+    {% endif %}
+</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
+    <p>
+        <label for="id_title">Title</label><br>
+        {{ form.title }}
+    </p>
+    
+    <p>
+        <label for="id_category">Category</label><br>
+        {{ form.category }}
+    </p>
+
+    <p>
+        <label for="id_entry">Content</label><br>
+        {{ form.entry }}
+    </p>
+
+    {% if object.pk %}
+        <p>{{ form.created_on }}</p>  
+        <p>{{ form.updated_on }}</p>  
+    {% endif %}
+    
+    <p>
+        <button type="submit" class="btn btn-primary">
+            {% if object.pk %}
+                Save Changes
+            {% else %}
+                Create Thread
+            {% endif %}
+        </button>
+    </p>
+</form>
+
+<p><a href="{% url 'forum:thread_list' %}">Go back to Thread List</a></p>
+
+{% endblock %}

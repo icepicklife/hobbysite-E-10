@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Thread List
+{% endblock %}
+
+{% block content %}
+    <h1>
+        Thread List
+    </h1>
+    
+    {% if user.is_authenticated %}
+        <h2>
+            Your Threads
+        </h2>
+    
+        {% if user_threads %}
+            <ul>
+                {% for thread in user_threads %}
+                <li>
+                    <a href="{{ thread.get_absolute_url }}"> {{ thread.title }}</a> - ({{ thread.category }})
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't written any threads.</p>
+        {% endif %}
+
+    {% endif %}
+
+    <h2>
+        Threads by Category
+    </h2>
+    {% for category, threads in threads_by_category.items %}
+    <h3>
+        {{ category }}
+    </h3>
+    <ul>
+        {% for thread in threads %}
+        <li>
+            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <p><a href="{{ create_thread_url }}">Create New Thread</a></p>
+    {% endif %}
+
+{% endblock %}

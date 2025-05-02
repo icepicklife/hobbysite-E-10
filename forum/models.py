@@ -1,32 +1,32 @@
 from django.db import models
 from django.urls import reverse
+from user_management.models import Profile
 
-# Create your models here.
-
-
-class PostCategory(models.Model):
+class ThreadCategory(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
 
-#JARENPOGI
-
     class Meta:
         ordering = ["name"]
-        verbose_name_plural = "Post Categories"
+        verbose_name_plural = "Thread Categories"
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('forum:post-list', args=[str(self.pk)])
+        return reverse('forum:category_detail', args=[str(self.pk)])
 
 
-class Post(models.Model):
+class Thread(models.Model):
+    author = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, null=True, related_name="threads"
+    )
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
-        PostCategory, on_delete=models.SET_NULL, null=True, related_name="post"
+        ThreadCategory, on_delete=models.SET_NULL, null=True, related_name='threads'
     )
     entry = models.TextField()
+    image = models.ImageField(upload_to='thread_images/', blank=True, null=True)  
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -37,4 +37,22 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('forum:post-detail', args=[str(self.pk)])
+        return reverse('forum:thread_view', args=[str(self.pk)]) 
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, null=True, related_name="comments"
+    )
+    thread = models.ForeignKey(
+        Thread, on_delete=models.CASCADE, related_name="comments"
+    )
+    entry = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return self.entry[:50]
