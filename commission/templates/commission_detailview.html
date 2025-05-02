@@ -12,27 +12,40 @@
 
     {% if is_owner %}
         <p><a href="{% url 'commission:commission_edit' object.pk %}">Edit Commission</a></p>
-    
-    {% else %}
-        <h2>Jobs</h2>
+
+        <h3>Applications</h3>
         <ul>
-            {% for job, open_slots, can_apply in manpower_info %}
-                <li>
-                    <strong>{{ job.role }}</strong> — {{ job.status }}<br>
-                    Required: {{ job.manpower_required }} | Open: {{ open_slots }}
-                    {% if user.is_authenticated and can_apply %}
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            {{ application_form.as_p }}
-                            <input type="hidden" name="job_id" value="{{ job.id }}">
-                            <button type="submit">Apply to Job</button>
-                        </form>
-                    {% elif user.is_authenticated %}
-                        <button disabled>Cannot Apply</button>
-                    {% endif %}
+            {% for application in applications %}
+                <li> {{ application.applicant.display_name }} applied for {{ application.job.role }} - Status: {{ application.status }}[<a href="{% url 'commission:application_evaluate' application.pk %}">Evaluate</a>]
                 </li>
             {% endfor %}
         </ul>
+    
+    {% else %}
+        <h2>Jobs</h2>
+        {% for job, open_slots, can_apply in manpower_info %}
+            <div>
+            <h4>{{ job.role }} ({{ job.status }})</h4>
+            <p>Slots open: {{ open_slots }} / {{ job.manpower_required }}</p>
+        
+            {% if can_apply %}
+                <form method="post">
+                {% csrf_token %}
+                {{ application_form.as_p }}
+                <input type="hidden" name="job_id" value="{{ job.id }}">
+                <button type="submit">Apply</button>
+                </form>
+            {% else %}
+                {% if job.status == 'Full' %}
+                <p><em>This job is full.</em></p>
+                {% elif not user.is_authenticated %}
+                <p><em>Please log in to apply.</em></p>
+                {% else %}
+                <p><em>You have already applied or no slots left.</em></p>
+                {% endif %}
+            {% endif %}
+            </div>
+        {% endfor %}
     {% endif %}
 
 {% endblock %}

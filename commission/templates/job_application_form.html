@@ -7,12 +7,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>
-        Apply to Job
-    </h1>
+    <h2>Evaluate Application</h2>
+
+    <p><strong>Applicant:</strong> {{ object.applicant.display_name }}</p>
+    <p><strong>Job:</strong> {{ object.job.role }}</p>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Apply</button>
+        <button type="submit">Update Status</button>
     </form>
 {% endblock %}

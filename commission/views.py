@@ -5,6 +5,9 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.db.models import Sum, Case, When, Value, IntegerField
 
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+
 from .models import Commission, Job, JobApplication
 from .forms import CommissionForm, JobFormSet, JobApplicationForm
 from user_management.models import Profile
@@ -46,6 +49,10 @@ class CommissionDetailView(DetailView):
         jobs = commission.job_set.all()
         profile = None
 
+        if profile == commission.author:
+            applications = JobApplication.objects.filter(job__commission=commission).select_related('applicant', 'job')
+            context['applications'] = applications
+
         if self.request.user.is_authenticated:
             profile = get_object_or_404(Profile, user=self.request.user)
 
@@ -73,10 +80,22 @@ class CommissionDetailView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+
         job_id = request.POST.get('job_id')
         job = get_object_or_404(Job, pk=job_id)
         profile = get_object_or_404(Profile, user=request.user)
         form = JobApplicationForm(request.POST)
+
+        # Prevent applying if job is full
+        accepted_count = job.jobapplication_set.filter(status='Accepted').count()
+        if job.status == 'Full' or accepted_count >= job.manpower_required:
+            messages.error(request, "This job is already full. Cannot apply.")
+            return redirect('commission:commission_detail', pk=job.commission.id)
+
+        # Prevent duplicate application
+        if job.jobapplication_set.filter(applicant=profile).exists():
+            messages.error(request, "You have already applied for this job.")
+            return redirect('commission:commission_detail', pk=job.commission.id)
 
         if form.is_valid():
             job_app = form.save(commit=False)
@@ -84,8 +103,9 @@ class CommissionDetailView(DetailView):
             job_app.applicant = profile
             job_app.applied_on = timezone.now()
             job_app.save()
+            messages.success(request, "Application submitted successfully.")
 
-        return redirect('commission_detail', pk=job.commission.id)
+        return redirect('commission:commission_detail', pk=job.commission.id)
 
 class CommissionCreateView(LoginRequiredMixin, CreateView):
     model = Commission
@@ -152,3 +172,42 @@ class CommissionUpdateView(LoginRequiredMixin, UpdateView):
             return redirect(self.get_success_url())
 
         return render(request, self.template_name, {'form': form, 'formset': formset})
+
+
+class JobApplicationUpdateView(LoginRequiredMixin, UpdateView):
+    model = JobApplication
+    form_class = JobApplication
+    template_name = 'job_application_form.html'
+    success_url = reverse_lazy('commission:commission_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        app = self.get_object()
+        if app.job.commission.author.user != request.user:
+            return HttpResponseForbidden("You are not allowed to evaluate this application.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        job = self.object.job
+        accepted_count = job.jobapplication_set.filter(status='Accepted').count()
+
+        if accepted_count >= job.manpower_required:
+            job.status = 'Full'
+            job.save()
+        else:
+            if job.status != 'Open':
+                job.status = 'Open'
+                job.save()
+
+        commission = job.commission
+        if all(j.status == 'Full' for j in commission.job_set.all()):
+            commission.status = 'Full'
+            commission.save()
+        else:
+            if commission.status == 'Full':
+                commission.status = 'Open'
+                commission.save()
+
+        messages.success(self.request, "Application has been updated and statuses auto-checked.")
+        return response
