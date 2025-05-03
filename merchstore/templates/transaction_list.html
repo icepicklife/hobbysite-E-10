@@ -8,19 +8,20 @@
 {% block content %}
     <h1>Transactions for Your Products</h1>
 
-    {% if transactions %}
-        <ul>
-            {% for transaction in transactions %}
-                <li>
-                    <strong>Product:</strong> {{ transaction.product.name }}<br>
-                    <strong>Buyer:</strong> {{ transaction.buyer.username }}<br>
-                    <strong>Amount:</strong> {{ transaction.amount }}<br>
-                    <strong>Status:</strong> {{ transaction.status }}<br>
-                    <strong>Date:</strong> {{ transaction.created_on|date:"F j, Y, g:i a" }}
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
+    {% if transactions_grouped %}
+        {% for buyer, transactions in transactions_grouped %}
+            <h2>Buyer: {{ buyer.user.username }}</h2>
+            <ul>
+                {% for transaction in transactions %}
+                    <li>
+                        <strong>Product:</strong> {{ transaction.product.name }}<br>
+                        <strong>Amount:</strong> {{ transaction.amount }}<br>
+                        <strong>Status:</strong> {{ transaction.status }}<br>
+                        <strong>Date:</strong> {{ transaction.created_on|date:"F j, Y, g:i a" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
     {% else %}
         <p>No transactions found.</p>
     {% endif %}

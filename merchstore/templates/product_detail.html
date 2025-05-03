@@ -1,36 +1,25 @@
-{% extends 'base.html' %}
-{% load static %}
+<h1>{{ product.name }}</h1>
 
-{% block title %}
-    {{ product.name }}
-{% endblock %}
+<p><strong>Product Type:</strong> {{ product.product_type }}</p>
+<p><strong>Description:</strong> {{ product.description }}</p>
+<p><strong>Price:</strong> ${{ product.price }}</p>
+<p><strong>Stock:</strong> {{ product.stock }}</p>
+<p><strong>Status:</strong> {{ product.status }}</p>
 
-{% block content %}
-    <h1>{{ product.name }}</h1>
-
-    <p><strong>Product Type:</strong> {{ product.product_type }}</p>
-    <p><strong>Description:</strong> {{ product.description }}</p>
-    <p><strong>Price:</strong> ${{ product.price }}</p>
-    <p><strong>Stock:</strong> {{ product.stock }}</p>
-    <p><strong>Status:</strong> {{ product.status }}</p>
-
-    {% if user.is_authenticated %}
-        {% if product.owner == user %}
-            <p><em>This is your product.</em></p>
-            <p><a href="{% url 'merchstore:product-update' product.pk %}">Edit Product</a></p>
-        {% elif product.stock > 0 %}
-            <h3>Buy this product</h3>
-            <form method="post">
-                {% csrf_token %}
-                {{ transaction_form.as_p }}
-                <button type="submit">Add to Cart</button>
-            </form>
-        {% else %}
-            <p><strong>Out of stock</strong></p>
-        {% endif %}
+{% if product.stock > 0 %}
+    {% if is_owner %}
+        <p><em>This is your product.</em></p>
+        <p><a href="{% url 'merchstore:product-update' product.pk %}">Edit Product</a></p>
     {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to buy this product.</p>
+        <h3>Buy this product</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ transaction_form.as_p }}
+            <button type="submit">Add to Cart</button>
+        </form>
     {% endif %}
+{% else %}
+    <p><strong>Out of stock</strong></p>
+{% endif %}
 
-    <p><a href="{% url 'merchstore:product-list' %}">Back to all products</a></p>
-{% endblock %}
+<p><a href="{% url 'merchstore:product-list' %}">Back to all products</a></p>
