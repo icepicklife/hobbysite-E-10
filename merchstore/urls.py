@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import (
-    ProductTypeListView,
     ProductListView,  # Added the new ProductListView
     ProductDetailView,
     ProductCreateView,
@@ -12,8 +11,7 @@ from .views import (
 app_name = "merchstore"
 
 urlpatterns = [
-    path("merchstore/items", ProductTypeListView.as_view(), name="product-type-list"),
-    path("merchstore/products", ProductListView.as_view(), name="product-list"),  # Updated for product list view
+    path("merchstore/items", ProductListView.as_view(), name="product-list"),  # Updated for product list view
     path("merchstore/item/<int:pk>", ProductDetailView.as_view(), name="product-detail"),
     path("merchstore/item/add", ProductCreateView.as_view(), name="product-create"),
     path("merchstore/item/<int:pk>/edit", ProductUpdateView.as_view(), name="product-update"),

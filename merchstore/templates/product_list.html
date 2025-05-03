@@ -29,7 +29,7 @@
     {% endif %}
 
     <section style="margin-top: 2em;">
-        <h2>All Other Products</h2>
+        <h2>All Products</h2>
         {% if all_products %}
             <ul>
                 {% for product in all_products %}
@@ -48,6 +48,6 @@
     {% if user.is_authenticated %}
         <p><a href="{% url 'merchstore:product-create' %}">Add a new product</a></p>
     {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to add a product.</p>
+        <p><a href="{% url 'accounts:login' %}">Log in</a> to add a product.</p>
     {% endif %}
 {% endblock %}

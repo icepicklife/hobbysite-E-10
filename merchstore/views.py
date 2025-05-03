@@ -4,30 +4,39 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Transaction, ProductType
 from .forms import ProductForm, TransactionForm
+from user_management.models import Profile 
+from accounts.models import UserAccount
 
-class ProductTypeListView(ListView):
-    model = ProductType
-    template_name = "product_type_list.html"
-    context_object_name = "product_types"
-
-    def get_queryset(self):
-        # List all product types with their associated products
-        return ProductType.objects.prefetch_related('products').all()
-
-class ProductListView(ListView):
+class ProductListView(ListView): 
     model = Product
     template_name = "product_list.html"
-    context_object_name = "products"
+    context_object_name = "products"  # optional
 
     def get_queryset(self):
         user = self.request.user
-        # Separate the user's products from the general products list
-        user_products = Product.objects.filter(owner=user)
-        all_products = Product.objects.exclude(owner=user)
-        return {
-            'user_products': user_products,
-            'all_products': all_products,
-        }
+        if user.is_authenticated:
+            # Ensure the user has a profile, if not, create one
+            profile, created = Profile.objects.get_or_create(user=user)
+            user_products = Product.objects.filter(owner=profile)
+            all_products = Product.objects.exclude(owner=profile)
+        else:
+            # Non-authenticated users see all products
+            user_products = None
+            all_products = Product.objects.all()
+        
+        return user_products, all_products
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        user_products, all_products = self.get_queryset()
+
+        context['user_products'] = user_products
+        context['all_products'] = all_products
+
+        return context
+
 
 class ProductDetailView(DetailView):
     model = Product
