@@ -12,6 +12,7 @@ from .models import Commission, Job, JobApplication
 from .forms import CommissionForm, JobFormSet, JobApplicationForm
 from user_management.models import Profile
 
+
 class CommissionListView(ListView):
     model = Commission
     template_name = 'commission_listview.html'
@@ -39,7 +40,7 @@ class CommissionListView(ListView):
             ).distinct()
         return context
 
-class CommissionDetailView(DetailView):
+class CommissionDetailView(DetailView): 
     model = Commission
     template_name = 'commission_detailview.html'
 
@@ -47,26 +48,20 @@ class CommissionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         commission = self.get_object()
         jobs = commission.job_set.all()
+        user = self.request.user
         profile = None
 
-        if profile == commission.author:
-            applications = JobApplication.objects.filter(job__commission=commission).select_related('applicant', 'job')
-            context['applications'] = applications
-
-        if self.request.user.is_authenticated:
-            profile = get_object_or_404(Profile, user=self.request.user)
+        if user.is_authenticated:
+            profile = get_object_or_404(Profile, user=user)
 
         manpower_info = []
         total_required = 0
         total_open = 0
 
         for job in jobs:
-            accepted_count = job.jobapplication_set.filter(status='Accepted').count()
-            open_slots = max(job.manpower_required - accepted_count, 0)
-            can_apply = (
-                profile and job.status == 'Open' and open_slots > 0 and
-                not job.jobapplication_set.filter(applicant=profile).exists()
-            )
+            open_slots = job.manpower_required - job.jobapplication_set.filter(status='Accepted').count()
+            already_applied = job.jobapplication_set.filter(applicant=profile).exists()
+            can_apply = open_slots > 0 and not already_applied
             manpower_info.append((job, open_slots, can_apply))
             total_required += job.manpower_required
             total_open += open_slots
@@ -77,35 +72,52 @@ class CommissionDetailView(DetailView):
         context['application_form'] = JobApplicationForm()
         context['is_owner'] = profile == commission.author if profile else False
 
+        if context['is_owner']:
+            applications = JobApplication.objects.filter(job__commission=commission).select_related('job', 'applicant')
+            context['applications'] = applications
+
         return context
 
-    def post(self, request, *args, **kwargs):
 
+    def post(self, request, *args, **kwargs):
+        commission = self.get_object()
+        profile = get_object_or_404(Profile, user=request.user)
+
+        # Owner accepting/rejecting
+        if profile == commission.author:
+            application_id = request.POST.get('application_id')
+            action = request.POST.get('action')
+            application = get_object_or_404(JobApplication, pk=application_id, job__commission=commission)
+
+            if action == 'accept':
+                application.status = 'Accepted'
+                application.save()
+            elif action == 'reject':
+                application.status = 'Rejected'
+                application.save()
+
+            return redirect('commission:commission_detail', pk=commission.pk)
+
+        # Applicant applying
         job_id = request.POST.get('job_id')
         job = get_object_or_404(Job, pk=job_id)
-        profile = get_object_or_404(Profile, user=request.user)
-        form = JobApplicationForm(request.POST)
 
-        # Prevent applying if job is full
-        accepted_count = job.jobapplication_set.filter(status='Accepted').count()
-        if job.status == 'Full' or accepted_count >= job.manpower_required:
-            messages.error(request, "This job is already full. Cannot apply.")
-            return redirect('commission:commission_detail', pk=job.commission.id)
+        existing_application = JobApplication.objects.filter(job=job, applicant=profile).first()
 
-        # Prevent duplicate application
-        if job.jobapplication_set.filter(applicant=profile).exists():
-            messages.error(request, "You have already applied for this job.")
-            return redirect('commission:commission_detail', pk=job.commission.id)
+        if not existing_application:
+            JobApplication.objects.create(
+                job=job,
+                applicant=profile,
+                status='Pending',
+                applied_on=timezone.now()
+            )
+            # ✅ Optional: add a message.success here
+        else:
+            # ✅ Optional: message.warning('You already applied')
+            pass
 
-        if form.is_valid():
-            job_app = form.save(commit=False)
-            job_app.job = job
-            job_app.applicant = profile
-            job_app.applied_on = timezone.now()
-            job_app.save()
-            messages.success(request, "Application submitted successfully.")
+        return redirect('commission:commission_detail', pk=commission.pk)
 
-        return redirect('commission:commission_detail', pk=job.commission.id)
 
 class CommissionCreateView(LoginRequiredMixin, CreateView):
     model = Commission

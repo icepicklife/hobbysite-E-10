@@ -59,7 +59,7 @@ class JobApplication(models.Model):
         ('Rejected', 'Rejected'),
     ]
 
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE,)
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_STATES, default='Pending')
     applied_on = models.DateTimeField(auto_now_add=True,)

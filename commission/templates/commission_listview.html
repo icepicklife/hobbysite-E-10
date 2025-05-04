@@ -4,48 +4,43 @@
 {% block title %}Commission List{% endblock %}
 
 {% block content %}
-<h1>Commissions</h1>
+    <h1>All Commissions</h1>
+    <ul>
+        {% for commission in commissions %}
+            <li>
+                <a href="{% url 'commission:commission_detail' commission.pk %}">
+                    {{ commission.title }} (Status: {{ commission.status }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 
-{% if user.is_authenticated %}
-    <h2>Your Commissions</h2>
-    {% if user_commissions %}
+    {% if user.is_authenticated %}
+        <h2>Your Commissions</h2>
         <ul>
             {% for commission in user_commissions %}
-                <li><a href="{% url 'commission:commission_detail' commission.pk %}">{{ commission.title }}</a></li>
+                <li>
+                    <a href="{% url 'commission:commission_detail' commission.pk %}">
+                        {{ commission.title }} (Status: {{ commission.status }})
+                    </a>
+                    <a href="{% url 'commission:commission_edit' commission.pk %}">Edit</a>
+                </li>
+            {% empty %}
+                <li>You have not created any commissions yet.</li>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>You haven’t created any commissions yet.</p>
-    {% endif %}
 
-    <h2>Commissions You've Applied To</h2>
-    {% if applied_commissions %}
+        <h2>Commissions You Applied To</h2>
         <ul>
             {% for commission in applied_commissions %}
-                <li><a href="{% url 'commission:commission_detail' commission.pk %}">{{ commission.title }}</a></li>
+                <li>
+                    <a href="{% url 'commission:commission_detail' commission.pk %}">
+                        {{ commission.title }} (Status: {{ commission.status }})
+                    </a>
+                </li>
+            {% empty %}
+                <li>You have not applied to any commissions yet.</li>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>You haven’t applied to any commissions yet.</p>
     {% endif %}
-
-    <p><a href="{% url 'commission:commission_add' %}">Create New Commission</a></p>
-{% endif %}
-
-<hr>
-
-<h2>All Commissions</h2>
-<ul>
-    {% for commission in commissions %}
-        <li>
-            <strong>{{ commission.title }}</strong> - {{ commission.status }}
-            <br>
-            Posted on: {{ commission.created_on }}
-            <br>
-            <a href="{% url 'commission:commission_detail' commission.pk %}">View Details</a>
-        </li>
-    {% empty %}
-        <p>No commissions found.</p>
-    {% endfor %}
-</ul>
 {% endblock %}
