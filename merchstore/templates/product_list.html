@@ -18,7 +18,6 @@
                             <a href="{% url 'merchstore:product-detail' product.pk %}">
                                 {{ product.name }} - ${{ product.price }}
                             </a>
-                            <a href="{% url 'merchstore:product-update' product.pk %}">(Edit)</a>
                         </li>
                     {% endfor %}
                 </ul>
