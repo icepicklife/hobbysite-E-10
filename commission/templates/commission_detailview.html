@@ -6,6 +6,7 @@
 {% block content %}
     <h1>{{ object.title }}</h1>
     <p><strong>Status:</strong> {{ object.status }}</p>
+    <p><strong>Author:</strong> {{ object.author }}</p>
     <p><strong>Description:</strong> {{ object.description }}</p>
     <p><strong>Created On:</strong> {{ object.created_on }}</p>
     <p><strong>Updated On:</strong> {{ object.updated_on }}</p>
@@ -45,7 +46,7 @@
                 <form method="post" style="display:inline;">
                 {% csrf_token %}
                 <input type="hidden" name="job_id" value="{{ job.id }}">
-                <button type="submit">Apply</button>
+                <button type="submit">Apply to Job</button>
                 </form>
             {% else %}
                 <em>Cannot apply (either full or already applied)</em>

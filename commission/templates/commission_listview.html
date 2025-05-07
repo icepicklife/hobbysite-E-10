@@ -28,6 +28,7 @@
             {% empty %}
                 <li>You have not created any commissions yet.</li>
             {% endfor %}
+            <p><a href="{% url 'commission:commission_add' %}" class="btn btn-primary">+ Add New Commission</a></p>
         </ul>
 
         <h2>Commissions You Applied To</h2>
