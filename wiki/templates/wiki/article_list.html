@@ -2,13 +2,11 @@
 
 {% load static %}
 
-{% block title %}
-{{ article.title }}
-{% endblock %}
+{% block title %} Article List {% endblock %}
 
 {% block content %}
 
-    <!-- If Logged In (fix formatting) -->
+    <!-- User Articles (If Logged In)  -->
     {% if user.is_authenticated %}
         {% if user_articles %}
             <h2>Your Articles</h2>
@@ -22,9 +20,8 @@
 
     <!-- All Articles -->
     <h1>Article List of Group 10 Online Wiki:</h1>
-    {% for article in articles %}
-    <h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2>
-
+    {% for article in all_articles %}
+        <h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2>
     {% endfor %}
 
 {% endblock %}
