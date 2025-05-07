@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    All Products
+{% endblock %}
+
+{% block content %}
+    <h1>Merchandise Store</h1>
+
+    {% if user.is_authenticated %}
+        <section>
+            <h2>Your Products</h2>
+            {% if user_products %}
+                <ul>
+                    {% for product in user_products %}
+                        <li>
+                            <a href="{% url 'merchstore:product-detail' product.pk %}">
+                                {{ product.name }} - ${{ product.price }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't listed any products yet.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    <section style="margin-top: 2em;">
+        <h2>All Products</h2>
+        {% if all_products %}
+            <ul>
+                {% for product in all_products %}
+                    <li>
+                        <a href="{% url 'merchstore:product-detail' product.pk %}">
+                            {{ product.name }} - ${{ product.price }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No products from other users.</p>
+        {% endif %}
+    </section>
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'merchstore:product-create' %}">Add a new product</a></p>
+    {% else %}
+        <p><a href="{% url 'accounts:login' %}">Log in</a> to add a product.</p>
+    {% endif %}
+{% endblock %}

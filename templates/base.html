@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}Final Project{% endblock %}</title>
+        {% block styles %}{% endblock %}
+    </head>
+    <body>
+        {% if user.is_authenticated %}
+            <form action="{% url 'accounts:logout' %}" method="post" style="margin-bottom: 1em;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </body>
+</html>

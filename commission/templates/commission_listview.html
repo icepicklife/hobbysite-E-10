@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Commission List{% endblock %}
+
+{% block content %}
+    <h1>All Commissions</h1>
+    <ul>
+        {% for commission in commissions %}
+            <li>
+                <a href="{% url 'commission:commission_detail' commission.pk %}">
+                    {{ commission.title }} (Status: {{ commission.status }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <h2>Your Commissions</h2>
+        <ul>
+            {% for commission in user_commissions %}
+                <li>
+                    <a href="{% url 'commission:commission_detail' commission.pk %}">
+                        {{ commission.title }} (Status: {{ commission.status }})
+                    </a>
+                    <a>  </a>
+                    <a href="{% url 'commission:commission_edit' commission.pk %}">Edit</a>
+                </li>
+            {% empty %}
+                <li>You have not created any commissions yet.</li>
+            {% endfor %}
+            <p><a href="{% url 'commission:commission_add' %}" class="btn btn-primary">+ Add New Commission</a></p>
+        </ul>
+
+        <h2>Commissions You Applied To</h2>
+        <ul>
+            {% for commission in applied_commissions %}
+                <li>
+                    <a href="{% url 'commission:commission_detail' commission.pk %}">
+                        {{ commission.title }} (Status: {{ commission.status }})
+                    </a>
+                </li>
+            {% empty %}
+                <li>You have not applied to any commissions yet.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if form.instance.pk %}Edit Commission{% else %}Create Commission{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Commission</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h2>Jobs</h2>
+    {{ formset.management_form }}
+    {% for form in formset %}
+        <div class="job-form">
+            {{ form.as_p }}
+        </div>
+    {% endfor %}
+
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

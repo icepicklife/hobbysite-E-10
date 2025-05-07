@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
+
+    {% if article.header %}
+        <img src="{{ article.header.url }}" alt="{{ article.title }} Image" />
+    {% endif %}    
+    
+    <h1>
+        {{ article.title }}
+    </h1>
+    
+    {% if user == article.author.user %}
+        <p><a href="{{ article.get_absolute_url }}edit/">Edit this article</a></p>
+    {% endif %}
+
+    <p>
+        {{ article.entry }}
+    </p>
+
+    <h4>
+        <a href="{% url 'blog:article_list' %}">Go back to Article List</a>
+    </h4>
+
+    <h6>
+        <ul>
+            <li>Created on: {{ article.created_on }}</li>
+            <li>Last updated: {{ article.updated_on }}</li>
+        </ul>
+    </h6>
+
+    <h3>
+        Other Articles by {{ article.author.user.username }}
+    </h3>
+    <ul>
+        {% for related_article in more_by_author %}
+            <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
+        {% empty %}
+            <li>No other articles by this author.</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+    <h3>
+        Leave a Comment
+    </h3>
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% if comment_form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in comment_form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        <p>
+            <label for="id_entry">Entry</label><br>
+            {{ comment_form.entry }}  <!-- This renders the <textarea> -->
+        </p>
+
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+    {% else %}
+        <p>You must be logged in to comment.</p>
+    {% endif %}
+
+    <h3>
+        Comments
+    </h3>
+    {% for comment in comments %}
+        <div>
+            <p><strong>{{ comment.author.user.username }}</strong> said:</p>
+            <p>{{ comment.entry }}</p>
+            <p><small>Commented on: {{ comment.created_on }}</small></p>
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+        
+{% endblock %}
