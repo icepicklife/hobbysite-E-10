@@ -81,7 +81,7 @@
     </h3>
     {% for comment in comments %}
         <div>
-            <p><strong>{{ comment.author.user.username }}</strong> said:</p>
+            <p><strong>{{ comment.author_article.user.username }}</strong> said:</p>
             <p>{{ comment.entry }}</p>
             <p><small>Commented on: {{ comment.created_on }}</small></p>
         </div>
