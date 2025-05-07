@@ -13,6 +13,7 @@
 
 {% block content %}
     <h2>User Login</h2>
+<<<<<<< HEAD
 
     {% if not user.is_authenticated %}
         <form method="post">
@@ -24,3 +25,11 @@
         <p>You are already logged in as {{ user.username }}.</p>
     {% endif %}
 {% endblock %}
+=======
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
+>>>>>>> wiki

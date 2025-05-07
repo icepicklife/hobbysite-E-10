@@ -2,19 +2,78 @@
 
 {% load static %}
 
-{% block title %}
-{{ article.title }}
-{% endblock %}
+{% block title %} {{ article.title }} {% endblock %}
 
 {% block content %}
-    <h1>{{ article.title }}</h1>
-    <p><b>Article:</b></p>
+    
+    <h1>{{ article.title }}</h1>    
+
+    <!-- Header Image --> 
+    {% if article.header_image %}
+    <img src="{{ article.header_image.url }}" style="max-width: 750px; height: auto;">
+    {% endif %}
+    
+    <!-- Article Content and Details  -->
+    <p><b>Article Content:</b></p>
     <p>{{ article.entry }}</p>
     <p><b>Details:</b></p>
     <div>
+        <p>Author: {{ article.author }}</p>
         <p>Category: {{ article.category }}</p>
         <p>Created on: {{ article.created_on }}</p>
         <p>Updated on: {{ article.updated_on }}</p>
     </div>
-    <button onclick="window.history.back()">Back</button>
+
+    <!-- Read More -->
+    <h1>Read More From {{ article.category }}</h1>
+
+    {% for related in related_articles %}
+        <h2><a href="{% url 'wiki:article_detail' related.pk %}">{{ related.title }}</a></h2>
+    {% empty %}
+        <p>No other articles in this category.</p>
+    {% endfor %}
+
+    <!-- Comment Form -->
+    {% if user.is_authenticated %}
+        <h2>Leave a Comment</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Post Comment" class="btn btn-primary">
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
+    {% endif %}
+
+    <!-- Existing Comments -->
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <div style="margin-bottom: 1em;">
+            <strong>{{ comment.author.user.username }}</strong>
+            <em>{{ comment.created_on|date:"Y-m-d H:i" }}</em>
+            <p>{{ comment.entry }}</p>
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+   <!-- Back Button -->
+   <form action="{% url 'wiki:article_list' %}" method="get">
+        <button type="submit">Back to Article List</button>
+   </form>   
+
+    <!-- Edit Article -->
+    <h3> For Owner of This Article: </h3>
+    <form action="{% url 'wiki:article_update' article.pk %}" method="get">
+        <button type="submit">Edit Article</button>
+    </form>
+
+    <!-- Create Article -->
+    <h3> For Logged In Users: </h3>
+    <form action="{% url 'wiki:article_create' %}" method="get">
+        <button type="submit">Create New Article</button>
+    </form>
+
+  
+      
 {% endblock %}
