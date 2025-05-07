@@ -8,8 +8,8 @@
 
 {% block content %}
 
-    {% if thread.header %}
-        <img src="{{ thread.header.url }}" alt="{{ thread.title }} Image" />
+    {% if thread.image %}
+        <img src="{{ thread.image.url }}" alt="{{ thread.title }} Image" />
     {% endif %}    
     
     <h1>

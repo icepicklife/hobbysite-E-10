@@ -8,7 +8,7 @@ from . import forms
 
 class ThreadListView(ListView):
     model = models.Thread
-    template_name = "forum/thread_list.html"
+    template_name = "thread_list.html"
     context_object_name = "unused_threads_queryset"
 
     def get_queryset(self):
@@ -41,7 +41,7 @@ class ThreadListView(ListView):
 
 class ThreadDetailView(DetailView):
     model = models.Thread
-    template_name = "forum/thread_view.html"
+    template_name = "thread_view.html"
     context_object_name = "thread"
 
     def get_context_data(self, **kwargs):
@@ -80,8 +80,8 @@ class ThreadDetailView(DetailView):
 
 class ThreadCreateView(LoginRequiredMixin, CreateView):
     model = models.Thread
-    fields = ["title", "entry", "header", "category"]
-    template_name = "forum/Thread_form.html"
+    fields = ["title", "entry", "image", "category"]
+    template_name = "Thread_form.html"
     success_url = reverse_lazy("forum:thread_list")
 
     def form_valid(self, form):
@@ -91,8 +91,8 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
 
 class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = models.Thread
-    fields = ["title", "entry", "header", "category"]
-    template_name = "forum/thread_form.html"
+    fields = ["title", "entry", "image", "category"]
+    template_name = "thread_form.html"
     success_url = reverse_lazy("forum:thread_list")
 
     def test_func(self):
