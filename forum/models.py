@@ -41,8 +41,8 @@ class Thread(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, null=True, related_name="comments"
+    author_forum = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, null=True, related_name="comments_forums"
     )
     thread = models.ForeignKey(
         Thread, on_delete=models.CASCADE, related_name="comments"
