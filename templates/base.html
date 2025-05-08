@@ -9,6 +9,20 @@
         <link rel="stylesheet" href="{% static 'style.css' %}">
         {% block styles %}{% endblock %}
     </head>
+
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/"><img src="/../media/images/baki.png" alt="Logo"></a></li>
+                <li><a href="/blog/articles">Blog</a></li>
+                <li><a href="/commissions/list">Comissions</a></li>
+                <li><a href="/forum/threads">Forums</a></li>
+                <li><a href="/merchstore/items">Merchstore</a></li>
+                <li><a href="/wiki/articles">Wiki</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <body>
         {% if user.is_authenticated %}
             <form action="{% url 'accounts:logout' %}" method="post" style="margin-bottom: 1em;">
@@ -17,6 +31,6 @@
             </form>
         {% endif %}
 
-        {% block content %}{% endblock %}
+       {% block content %}{% endblock %}
     </body>
 </html>

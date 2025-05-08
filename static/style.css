@@ -1,19 +1,20 @@
 body {
     background-color: aliceblue;
+    text-align:center;
   }
 
   header {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 40px 0;
+    padding: 0;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
-  header img {
-    width: clamp(5rem, 3.702rem + 5.769vw, 10.625rem); /* i like */
-    height: auto;
+
+  nav img {
+    width: auto;
+    max-height: 50px;
   }
   
   .nav-links {
@@ -36,9 +37,10 @@ body {
     border: none;
     cursor: pointer;
     transition: color 0.3s ease;
-    font-size: clamp(0.75rem, 0.692rem + 0.256vw, 1rem);
+    font-size: 25px;
   }
   
   .nav-links a:hover {
     color: #007BFF;
   }
+
