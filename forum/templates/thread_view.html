@@ -79,9 +79,9 @@
     <h3>
         Comments
     </h3>
-    {% for comment in comments %}
+    {% for comment in forum_comments %}
         <div>
-            <p><strong>{{ comment.author.user.username }}</strong> said:</p>
+            <p><strong>{{ comment.author.user.username }}</strong> commented:</p>
             <p>{{ comment.entry }}</p>
             <p><small>Commented on: {{ comment.created_on }}</small></p>
         </div>

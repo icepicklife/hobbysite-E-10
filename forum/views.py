@@ -54,7 +54,7 @@ class ThreadDetailView(DetailView):
         if self.request.user.is_authenticated:
             context["comment_form"] = forms.CommentForm()
         
-        context["comments"] = thread.comments.order_by("-created_on")
+        context["forum_comments"] = thread.forum_comments.order_by("-created_on")
         context["can_edit"] = self.request.user == thread.author.user
         context["image_gallery"] = getattr(thread, "gallery_images", None)
 

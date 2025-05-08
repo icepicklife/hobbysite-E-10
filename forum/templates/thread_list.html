@@ -7,47 +7,33 @@ Thread List
 {% endblock %}
 
 {% block content %}
-    <h1>
-        Thread List
-    </h1>
-    
-    {% if user.is_authenticated %}
-        <h2>
-            Your Threads
-        </h2>
-    
-        {% if user_threads %}
+<h1>Thread List</h1>
+
+{% if user.is_authenticated %}
+    {% if user_threads %}
+        {# Group user's threads by category #}
+        {% regroup user_threads by category as category_groups %}
+        {% for group in category_groups %}
+            <h3>
+                {{ group.grouper.name }}
+                {% if group.grouper.description %}
+                    <i>({{ group.grouper.description }})</i>
+                {% endif %}
+            </h3>
             <ul>
-                {% for thread in user_threads %}
-                <li>
-                    <a href="{{ thread.get_absolute_url }}"> {{ thread.title }}</a> - ({{ thread.category }})
-                </li>
+                {% for thread in group.list %}
+                    <li>
+                        <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+                    </li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>You haven't written any threads.</p>
-        {% endif %}
-
-    {% endif %}
-
-    <h2>
-        Threads by Category
-    </h2>
-    {% for category, threads in threads_by_category.items %}
-    <h3>
-        {{ category }}
-    </h3>
-    <ul>
-        {% for thread in threads %}
-        <li>
-            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
-        </li>
         {% endfor %}
-    </ul>
-    {% endfor %}
-
-    {% if user.is_authenticated %}
-        <p><a href="{{ create_thread_url }}">Create New Thread</a></p>
+    {% else %}
+        <p>You haven't written any threads.</p>
     {% endif %}
+{% endif %}
 
+{% if user.is_authenticated %}
+    <p><a href="{{ create_thread_url }}" class="btn btn-primary">+ Create New Thread</a></p>
+{% endif %}
 {% endblock %}
