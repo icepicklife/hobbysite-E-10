@@ -13,7 +13,7 @@ from .forms import CommissionForm, JobFormSet, JobApplicationForm
 from user_management.models import Profile
 
 
-class CommissionListView(ListView):
+class CommissionListView(LoginRequiredMixin, ListView):
     model = Commission
     template_name = 'commission_listview.html'
     context_object_name = 'commissions'
@@ -40,7 +40,7 @@ class CommissionListView(ListView):
             ).distinct()
         return context
 
-class CommissionDetailView(DetailView): 
+class CommissionDetailView(LoginRequiredMixin, DetailView): 
     model = Commission
     template_name = 'commission_detailview.html'
 
