@@ -5,14 +5,26 @@
 {% block title %} Article Create {% endblock %}
 
 {% block content %}
+  
+  <h2>Create New Category</h2>
+  <p><em>creating a new category will refresh the page and will add the category to the drop down list below</em></p>
+  <form method="post">
+    {% csrf_token %}
+    {{ category_form.as_p }}
+    <button type="submit">Create Category</button>
+  </form>
 
   <h2>Create New Article</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
     {{ form.as_p }}
-    <button type="submit">Create</button>
+    <button type="submit">Create Article</button>
   </form>
+
+  <!-- Back to Article List Button  -->
+  <form action="{% url 'wiki:article_list' %}" method="get">
+      <button type="submit">Back to Article List</button>
+  </form>   
   
 {% endblock %}
 

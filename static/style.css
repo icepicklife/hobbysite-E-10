@@ -4,25 +4,24 @@ body {
   }
 
   header {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  padding: 0;
+  background-color: #fff;
+  box-shadow: gray;
   }
 
   nav img {
     width: auto;
-    max-height: 50px;
+    max-height: 100px;
   }
   
   .nav-links {
+    justify-content: center; 
+    align-items: center; 
     list-style: none;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
   }
   
   .nav-links li {
@@ -44,3 +43,25 @@ body {
     color: #007BFF;
   }
 
+  .commission-list {
+    list-style: none;
+  }
+
+  /* from Paige other personal proj */
+  
+  button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #555;
+}
+  

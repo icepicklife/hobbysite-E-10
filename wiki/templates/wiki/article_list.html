@@ -2,31 +2,33 @@
 
 {% load static %}
 
-{% block title %} Article List {% endblock %}
+{% block title %}Article List{% endblock %}
 
 {% block content %}
 
-    <!-- User Articles (If Logged In)  -->
+    <!-- User Articles (If Logged In) -->
     {% if user.is_authenticated %}
         {% if user_articles %}
-            <h2>Your Articles</h2>
-            <ul>
+            <h1>Your Articles:</h1>
             {% for article in user_articles %}
-                <li><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></li>
+                <h2>
+                    <a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a>
+                </h2>
             {% endfor %}
-            </ul>
         {% endif %}
     {% endif %}
 
     <!-- All Articles -->
-    <h1>Article List of Group 10 Online Wiki:</h1>
+    <h1>Article List (Wiki)</h1>
     {% for article in all_articles %}
-        <h2><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></h2>
+        <h4>
+            <a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a>
+        </h4>
     {% endfor %}
 
+    <!-- Create Article -->
+    <form action="{% url 'wiki:article_create' %}" method="get">
+        <button type="submit">Create New Article</button>
+    </form>
+
 {% endblock %}
-
-
-
-
-

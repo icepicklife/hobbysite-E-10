@@ -1,13 +1,11 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Article, Comment
-from .forms import ArticleCreateForm, ArticleUpdateForm, CommentForm
+from .models import Article, Comment, ArticleCategory
+from .forms import ArticleCreateForm, ArticleUpdateForm, CommentForm, ArticleCategoryCreateForm
 from user_management.models import Profile
-from . import forms
 
 class ArticleListView(ListView):
     model = Article
@@ -81,12 +79,25 @@ class ArticleDetailView(FormMixin, DetailView):
                 return redirect("login")
         else:
             return self.form_invalid(form)
-        
+
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     form_class = ArticleCreateForm
     template_name = "wiki/article_create.html"
-    success_url = reverse_lazy("wiki:article_create")  
+    success_url = reverse_lazy("wiki:article_list")  
+    
+    # for category creation
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category_form'] = ArticleCategoryCreateForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        category_form = ArticleCategoryCreateForm(request.POST)
+        if category_form.is_valid():
+            category_form.save()
+            return redirect("wiki:article_create") 
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
         try:
@@ -94,6 +105,18 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         except Profile.DoesNotExist:
             return redirect("USERS ONLY")  
         form.instance.author = profile
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('wiki:article_list')
+
+class ArticleCategoryCreateView(LoginRequiredMixin, CreateView):
+    model = ArticleCategory
+    form_class = ArticleCategoryCreateForm
+    template_name = "wiki/article_category_create.html"
+    success_url = reverse_lazy('wiki:article_create') 
+    
+    def form_valid(self, form):
         return super().form_valid(form)
 
 class ArticleUpdateView(UpdateView):

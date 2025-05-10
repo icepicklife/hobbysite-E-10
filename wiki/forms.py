@@ -1,5 +1,5 @@
 from django import forms
-from .models import Article, Comment
+from .models import Article, Comment, ArticleCategory
 
 class ArticleImageUploadForm(forms.ModelForm):
     class Meta:
@@ -10,6 +10,11 @@ class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
         exclude = ["created_on", "updated_on", "author"]
+
+class ArticleCategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = ArticleCategory
+        fields = ["name", "description"]
 
 class ArticleUpdateForm(forms.ModelForm):
     class Meta:

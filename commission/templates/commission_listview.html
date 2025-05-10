@@ -5,7 +5,7 @@
 
 {% block content %}
     <h1>All Commissions</h1>
-    <ul>
+    <ul class="commission-list">
         {% for commission in commissions %}
             <li>
                 <a href="{% url 'commission:commission_detail' commission.pk %}">
@@ -17,7 +17,7 @@
 
     {% if user.is_authenticated %}
         <h2>Your Commissions</h2>
-        <ul>
+        <ul class="commission-list">
             {% for commission in user_commissions %}
                 <li>
                     <a href="{% url 'commission:commission_detail' commission.pk %}">
@@ -33,7 +33,7 @@
         </ul>
 
         <h2>Commissions You Applied To</h2>
-        <ul>
+        <ul class="commission-list">
             {% for commission in applied_commissions %}
                 <li>
                     <a href="{% url 'commission:commission_detail' commission.pk %}">
