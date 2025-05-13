@@ -12,17 +12,15 @@ from django.http import HttpResponseRedirect
 class ProductListView(ListView): 
     model = Product
     template_name = "product_list.html"
-    context_object_name = "products"  # optional
+    context_object_name = "products"  
 
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:
-            # Ensure the user has a profile, if not, create one
             profile, created = Profile.objects.get_or_create(user=user)
             user_products = Product.objects.filter(owner=profile)
             all_products = Product.objects.exclude(owner=profile)
         else:
-            # Non-authenticated users see all products
             user_products = None
             all_products = Product.objects.all()
         
@@ -50,10 +48,8 @@ class ProductDetailView(DetailView):
         product = context['product']
         user = self.request.user
 
-        # Check if the current user is the owner of the product
         context['is_owner'] = user.is_authenticated and product.owner == user.profile
 
-        # Add transaction form (always show it)
         context['transaction_form'] = TransactionForm(
             user=user if user.is_authenticated else None,
             initial={'product': product}
@@ -68,7 +64,6 @@ class ProductDetailView(DetailView):
         form = TransactionForm(request.POST, user=request.user if request.user.is_authenticated else None)
 
         if not request.user.is_authenticated:
-            # Save form data to session and redirect to login
             request.session['pending_transaction'] = {
                 'product_id': product.pk,
                 'amount': request.POST.get('amount'),
@@ -79,7 +74,6 @@ class ProductDetailView(DetailView):
         if form.is_valid():
             transaction = form.save(commit=False)
 
-            # Ensure that the buyer is set to the Profile associated with the logged-in user
             try:
                 profile = Profile.objects.get(user=request.user)
                 transaction.buyer = profile
@@ -165,7 +159,6 @@ class CartView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         try:
             profile = self.request.user.profile
-            # Get all "On cart" transactions by the current profile, ordered by seller (product owner)
             return Transaction.objects.filter(
                 buyer=profile,
                 status='On cart'
@@ -184,10 +177,8 @@ class TransactionListView(LoginRequiredMixin, TemplateView):
             context['transactions_grouped'] = []
             return context
 
-        # Get all transactions where this profile is the seller (product.owner)
         transactions = Transaction.objects.filter(product__owner=profile).select_related('buyer__user', 'product')
 
-        # Group transactions by buyer
         buyer_groups = {}
         for tx in transactions:
             buyer = tx.buyer
@@ -195,6 +186,5 @@ class TransactionListView(LoginRequiredMixin, TemplateView):
                 buyer_groups[buyer] = []
             buyer_groups[buyer].append(tx)
 
-        # Sort by buyer username for consistent ordering
         context['transactions_grouped'] = sorted(buyer_groups.items(), key=lambda x: x[0].user.username)
         return context

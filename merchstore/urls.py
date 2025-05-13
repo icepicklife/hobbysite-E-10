@@ -1,11 +1,11 @@
 from django.urls import path
 from .views import (
-    ProductListView,  # Added the new ProductListView
+    ProductListView, 
     ProductDetailView,
     ProductCreateView,
     ProductUpdateView,
-    CartView,  # Added the new CartView
-    TransactionListView,  # Added the new TransactionListView
+    CartView,  
+    TransactionListView,
 )
 
 app_name = "merchstore"

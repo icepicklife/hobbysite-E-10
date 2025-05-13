@@ -4,18 +4,17 @@ from .models import Product, Transaction
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ['owner']  # Owner is auto-assigned, not editable
+        exclude = ['owner']
 
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['product', 'amount', 'status', 'buyer']  # Ensure 'buyer' is included in the form fields
+        fields = ['product', 'amount', 'status', 'buyer']
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)  # Get the user if passed, otherwise None
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
-        # Conditionally handle the 'buyer' field
         if user and user.is_authenticated:
             self.fields['buyer'].initial = user
             self.fields['buyer'].widget.attrs['readonly'] = True  # Make the field readonly for logged-in users

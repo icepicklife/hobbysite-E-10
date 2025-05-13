@@ -1,10 +1,10 @@
 from django.db import models
 from user_management.models import Profile 
-from django.urls import reverse # Import Profile model
+from django.urls import reverse 
 
 # Default profile for owner
 def get_default_profile():
-    return Profile.objects.first()  # Can adjust based on how you want to set a default profile
+    return Profile.objects.first()  
 
 # ProductType Model
 class ProductType(models.Model):
@@ -12,12 +12,11 @@ class ProductType(models.Model):
     description = models.TextField()
 
     class Meta:
-        ordering = ["name"]  # Sort product types by name in ascending order
+        ordering = ["name"] 
 
     def __str__(self):
         return self.name
 
-# Product Model
 class Product(models.Model):
     STATUS_CHOICES = [
         ('Available', 'Available'),
