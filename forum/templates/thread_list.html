@@ -29,11 +29,15 @@ Thread List
             </ul>
         {% endfor %}
     {% else %}
-        <p>You haven't written any threads.</p>
+        <div class="alert alert-info">
+            <p>You haven't written any threads yet. Start by creating your first one below!</p>
+        </div>
     {% endif %}
-{% endif %}
 
-{% if user.is_authenticated %}
-    <p><a href="{{ create_thread_url }}" class="btn btn-primary">+ Create New Thread</a></p>
+    <p>
+        <a href="{{ create_thread_url }}" class="btn btn-primary">+ Create New Thread</a>
+    </p>
+{% else %}
+    <p>Please log in to view your threads.</p>
 {% endif %}
 {% endblock %}
