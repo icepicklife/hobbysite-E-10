@@ -21,19 +21,21 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.shortcuts import render
 
+
 def index(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
+
 
 urlpatterns = [
-    path('', index, name='index'),
+    path("", index, name="index"),
     path("admin/", admin.site.urls),
     path("", include("merchstore.urls", namespace="merchstore")),
     path("commissions/", include("commission.urls", namespace="commission")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("forum/", include("forum.urls", namespace="forum")),
     path("wiki/", include("wiki.urls")),
-    path("", include("accounts.urls", namespace = "accounts")),
-    path("", include("user_management.urls", namespace="user_management"))
+    path("", include("accounts.urls", namespace="accounts")),
+    path("", include("user_management.urls", namespace="user_management")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
