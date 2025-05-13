@@ -26,9 +26,14 @@ class ArticleListView(ListView):
             other_articles = queryset.exclude(author=user_profile).order_by(
                 "category__name", "title"
             )
+
+            context["user_articles"] = user_articles
+
         else:
             user_articles = None
             other_articles = queryset.order_by("category__name", "title")
+            
+            context["user_articles"] = None
 
         articles_by_category = {}
         for article in other_articles:
@@ -37,7 +42,6 @@ class ArticleListView(ListView):
             )
             articles_by_category.setdefault(category_name, []).append(article)
 
-        context["user_articles"] = user_articles
         context["articles_by_category"] = articles_by_category
         context["create_article_url"] = reverse_lazy("blog:article_create")
 
