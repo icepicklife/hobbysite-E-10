@@ -134,7 +134,7 @@ STATICFILES_DIRS = [
 if not DEBUG:
     STATIC_ROOT = [os.path.join(BASE_DIR, 'static')]
 
-LOGIN_REDIRECT_URL = '/create-profile'
+LOGIN_REDIRECT_URL = '/post-login-redirect/'
 
 LOGOUT_REDIRECT_URL = '../../accounts/login'
 

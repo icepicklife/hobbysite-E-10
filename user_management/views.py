@@ -3,12 +3,12 @@ from django.views.generic.edit import UpdateView, CreateView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import ProfileForm
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-
     model = Profile
     form_class = ProfileForm
     template_name = "profile_form.html"
@@ -29,4 +29,12 @@ class ProfileCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# Create your views here.
+@login_required
+def post_login_redirect(request):
+    """
+    Redirects user to index if profile exists.
+    Otherwise, sends them to create profile.
+    """
+    if hasattr(request.user, 'profile'):
+        return redirect('index')
+    return redirect('user_management:create-profile')
