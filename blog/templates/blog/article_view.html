@@ -83,5 +83,9 @@
     {% empty %}
         <p>No comments yet.</p>
     {% endfor %}
+
+    <form action="{% url 'blog:article_list' %}" method="get">
+        <button type="submit">Back to Article List</button>
+    </form>
         
 {% endblock %}

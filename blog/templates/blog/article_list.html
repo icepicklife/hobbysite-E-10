@@ -24,22 +24,25 @@ Article List
             <p>You haven't written any articles.</p>
         {% endif %}
 
-    {% endif %}
-
-    <h2>
+        <h2>
         Articles by Category
-    </h2>
-    {% for category, articles in articles_by_category.items %}
-    <h3>
-        {{ category }}
-    </h3>
-        {% for article in articles %}
-        <p><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></p>
+        </h2>
+        
+        {% for category, articles in articles_by_category.items %}
+        <h3>
+            {{ category }}
+        </h3>
+            {% for article in articles %}
+            <p><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></p>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-    {% if user.is_authenticated %}
-        <p><a href="{{ create_article_url }}">Create New Article</a></p>
+        {% if user.is_authenticated %}
+            <p><a href="{{ create_article_url }}">+ Create New Article</a></p>
+        {% endif %}
+
+    {% else %}
+        <p>Please log in to see the article list.</p>
     {% endif %}
 
 {% endblock %}
