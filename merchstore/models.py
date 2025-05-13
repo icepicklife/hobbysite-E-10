@@ -2,11 +2,9 @@ from django.db import models
 from user_management.models import Profile 
 from django.urls import reverse 
 
-# Default profile for owner
 def get_default_profile():
     return Profile.objects.first()  
 
-# ProductType Model
 class ProductType(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -33,7 +31,7 @@ class Product(models.Model):
     )
     description = models.TextField()
     price = models.DecimalField(max_digits=20, decimal_places=2)
-    stock = models.PositiveIntegerField(default=0)  # Default value set to 0
+    stock = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
 
     class Meta:
@@ -45,7 +43,13 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("merchstore:product-detail", args=[self.pk])
 
-# Transaction Model
+    def save(self, *args, **kwargs):
+        if self.stock == 0:
+            self.status = 'Out of stock'
+        elif self.status == 'Out of stock' and self.stock > 0:
+            self.status = 'Available'  # Optional: reset status if restocked
+        super().save(*args, **kwargs)
+
 class Transaction(models.Model):
     STATUS_CHOICES = [
         ('On cart', 'On cart'),
