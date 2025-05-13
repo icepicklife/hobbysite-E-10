@@ -8,7 +8,7 @@ class CommissionForm(forms.ModelForm):
     class Meta:
 
         model = Commission
-        exclude = ['author', 'created_on', 'updated_on']
+        exclude = ["author", "created_on", "updated_on"]
 
 
 class JobForm(forms.ModelForm):
@@ -16,20 +16,21 @@ class JobForm(forms.ModelForm):
     class Meta:
 
         model = Job
-        fields = ['role', 'manpower_required', 'status']
+        fields = ["role", "manpower_required", "status"]
+
 
 JobFormSet = inlineformset_factory(
     Commission,
     Job,
-    fields=('role', 'manpower_required', 'status'),
+    fields=("role", "manpower_required", "status"),
     extra=1,
-    can_delete=False
+    can_delete=False,
 )
 
 
 class JobApplicationForm(forms.ModelForm):
 
     class Meta:
-        
+
         model = JobApplication
-        exclude = ['applicant', 'applied_on']
+        exclude = ["applicant", "applied_on"]
