@@ -21,7 +21,7 @@
                     <li><a href="/merchstore/items">Merchstore</a></li>
                     <li><a href="/wiki/articles">Wiki</a></li>
                     {% if not user.is_authenticated %}
-                        <li><a href="{% url 'accounts:login' %}">(Not Logged In)</a></li>
+                        <li><a href="{% url 'accounts:login' %}">(Log In)</a></li>
                     {% else %}
                         <li>Logged In As: {{ user.username }}</li>
                     {% endif %}
