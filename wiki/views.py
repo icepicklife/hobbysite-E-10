@@ -4,8 +4,14 @@ from django.views.generic.edit import FormMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, Comment, ArticleCategory
-from .forms import ArticleCreateForm, ArticleUpdateForm, CommentForm, ArticleCategoryCreateForm
+from .forms import (
+    ArticleCreateForm,
+    ArticleUpdateForm,
+    CommentForm,
+    ArticleCategoryCreateForm,
+)
 from user_management.models import Profile
+
 
 class ArticleListView(ListView):
     model = Article
@@ -13,7 +19,7 @@ class ArticleListView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().order_by("category__name", "title", "-created_on")
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -26,7 +32,7 @@ class ArticleListView(ListView):
             except Profile.DoesNotExist:
                 user_articles = None
                 other_articles = Article.objects.all()
-            
+
             context["user_articles"] = user_articles
             context["all_articles"] = other_articles
         else:
@@ -34,7 +40,7 @@ class ArticleListView(ListView):
             context["all_articles"] = Article.objects.all()
 
         return context
-    
+
     def get_success_url(self):
         return reverse("wiki:article_list", kwargs={"pk": self.object.pk})
 
@@ -60,7 +66,11 @@ class ArticleDetailView(FormMixin, DetailView):
         context["form"] = self.get_form()
 
         user = self.request.user
-        context["is_owner"] = user.is_authenticated and hasattr(user, "profile") and article.author == user.profile
+        context["is_owner"] = (
+            user.is_authenticated
+            and hasattr(user, "profile")
+            and article.author == user.profile
+        )
 
         return context
 
@@ -80,50 +90,53 @@ class ArticleDetailView(FormMixin, DetailView):
         else:
             return self.form_invalid(form)
 
+
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     form_class = ArticleCreateForm
     template_name = "wiki/article_create.html"
-    success_url = reverse_lazy("wiki:article_list")  
-    
+    success_url = reverse_lazy("wiki:article_list")
+
     # for category creation
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category_form'] = ArticleCategoryCreateForm()
+        context["category_form"] = ArticleCategoryCreateForm()
         return context
 
     def post(self, request, *args, **kwargs):
         category_form = ArticleCategoryCreateForm(request.POST)
         if category_form.is_valid():
             category_form.save()
-            return redirect("wiki:article_create") 
+            return redirect("wiki:article_create")
         return super().post(request, *args, **kwargs)
-    
+
     def form_valid(self, form):
         try:
             profile = Profile.objects.get(user=self.request.user)
         except Profile.DoesNotExist:
-            return redirect("USERS ONLY")  
+            return redirect("USERS ONLY")
         form.instance.author = profile
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('wiki:article_list')
+        return reverse_lazy("wiki:article_list")
+
 
 class ArticleCategoryCreateView(LoginRequiredMixin, CreateView):
     model = ArticleCategory
     form_class = ArticleCategoryCreateForm
     template_name = "wiki/article_category_create.html"
-    success_url = reverse_lazy('wiki:article_create') 
-    
+    success_url = reverse_lazy("wiki:article_create")
+
     def form_valid(self, form):
         return super().form_valid(form)
+
 
 class ArticleUpdateView(UpdateView):
     model = Article
     form_class = ArticleUpdateForm
     template_name = "wiki/article_update.html"
-    
+
     def get_success_url(self):
         return reverse("wiki:article_detail", kwargs={"pk": self.object.pk})
 
@@ -131,6 +144,6 @@ class ArticleUpdateView(UpdateView):
         try:
             profile = Profile.objects.get(user=self.request.user)
         except Profile.DoesNotExist:
-            return redirect("USERS ONLY")  
+            return redirect("USERS ONLY")
         form.instance.author = profile
         return super().form_valid(form)
