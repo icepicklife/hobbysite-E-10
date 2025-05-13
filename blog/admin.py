@@ -14,23 +14,30 @@ class CommentInline(admin.TabularInline):
 
 
 class ArticleCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name","description")
+    list_display = ("name", "description")
     search_fields = ("name",)
     inlines = [ArticleInline]
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ("title", "author_display_name", "category", "created_on", "updated_on")
+    list_display = (
+        "title",
+        "author_display_name",
+        "category",
+        "created_on",
+        "updated_on",
+    )
     list_filter = ("category", "created_on")
     search_fields = ("title", "entry")
     date_hierarchy = "created_on"
     ordering = ("created_on",)
-    readonly_fields = ("created_on","updated_on")
+    readonly_fields = ("created_on", "updated_on")
 
     def author_display_name(self, obj):
         if obj.author:
             return obj.author.display_name
         return None
+
     author_display_name.short_description = "Author"
 
     inlines = [CommentInline]
@@ -46,15 +53,17 @@ class CommentAdmin(admin.ModelAdmin):
 
     def article_title(self, obj):
         return obj.article.title
+
     article_title.short_description = "Article"
 
     def author_display_name(self, obj):
         if obj.author:
             return obj.author.display_name
         return None
+
     author_display_name.short_description = "Author"
 
-        
+
 admin.site.register(ArticleCategory, ArticleCategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Comment, CommentAdmin)
