@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import models
 from . import forms
 
+
 class ThreadListView(ListView):
     model = models.Thread
     template_name = "thread_list.html"
@@ -22,7 +23,9 @@ class ThreadListView(ListView):
         if self.request.user.is_authenticated:
             user_profile = get_object_or_404(models.Profile, user=self.request.user)
             user_threads = queryset.filter(author=user_profile).order_by("-created_on")
-            other_threads = queryset.exclude(author=user_profile).order_by("category__name", "title")
+            other_threads = queryset.exclude(author=user_profile).order_by(
+                "category__name", "title"
+            )
         else:
             user_threads = None
             other_threads = queryset.order_by("category__name", "title")
@@ -49,23 +52,24 @@ class ThreadDetailView(DetailView):
         thread = self.get_object()
 
         context["more_by_author"] = models.Thread.objects.filter(
-            author=thread.author).exclude(id=thread.id)[:2]
-        
+            author=thread.author
+        ).exclude(id=thread.id)[:2]
+
         if self.request.user.is_authenticated:
             context["comment_form"] = forms.CommentForm()
-        
+
         context["forum_comments"] = thread.forum_comments.order_by("-created_on")
         context["can_edit"] = self.request.user == thread.author.user
         context["image_gallery"] = getattr(thread, "gallery_images", None)
 
         return context
-    
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        
+
         if not request.user.is_authenticated:
             return redirect("login")
-        
+
         form = forms.CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -73,8 +77,8 @@ class ThreadDetailView(DetailView):
             comment.author = request.user.profile
             comment.save()
             return redirect(self.object.get_absolute_url())
-        
-        context = self.get_context_data(comment_form = form)
+
+        context = self.get_context_data(comment_form=form)
         return self.render_to_response(context)
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from user_management.models import Profile
 
+
 class ThreadCategory(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -14,7 +15,7 @@ class ThreadCategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('forum:category_detail', args=[str(self.pk)])
+        return reverse("forum:category_detail", args=[str(self.pk)])
 
 
 class Thread(models.Model):
@@ -23,10 +24,10 @@ class Thread(models.Model):
     )
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
-        ThreadCategory, on_delete=models.SET_NULL, null=True, related_name='threads'
+        ThreadCategory, on_delete=models.SET_NULL, null=True, related_name="threads"
     )
     entry = models.TextField()
-    image = models.ImageField(upload_to='thread_images/', blank=True, null=True)  
+    image = models.ImageField(upload_to="thread_images/", blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -37,7 +38,7 @@ class Thread(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('forum:thread_view', args=[str(self.pk)]) 
+        return reverse("forum:thread_view", args=[str(self.pk)])
 
 
 class Comment(models.Model):
