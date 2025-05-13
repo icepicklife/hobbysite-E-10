@@ -37,4 +37,4 @@ def post_login_redirect(request):
     """
     if hasattr(request.user, 'profile'):
         return redirect('index')
-    return redirect('user_management:create-profile')
+    return redirect('user_management:create_profile')
