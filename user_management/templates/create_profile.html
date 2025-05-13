@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Create Profile</h2>
+    <h2>Create Account and Profile</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Profile</button>
+        <fieldset>
+            <legend>Account Information</legend>
+            {{ user_form.as_p }}
+        </fieldset>
+        <fieldset>
+            <legend>Profile Information</legend>
+            {{ profile_form.as_p }}
+        </fieldset>
+        <button type="submit">Create Account</button>
     </form>
 {% endblock %}

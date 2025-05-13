@@ -1,40 +1,45 @@
 from django.shortcuts import render, redirect
-from django.views.generic.edit import UpdateView, CreateView
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from accounts.models import User  # Your custom user model
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, UserForm  # Ensure both are defined
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 
+class CombinedCreateView(View):
+    def get(self, request):
+        user_form = UserForm()
+        profile_form = ProfileForm()
+        return render(request, "create_profile.html", {
+            "user_form": user_form,
+            "profile_form": profile_form,
+        })
+
+    def post(self, request):
+        user_form = UserForm(request.POST)
+        profile_form = ProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+            login(request, user)
+            return redirect("index")  # Goes straight to homepage
+
+        return render(request, "create_profile.html", {
+            "user_form": user_form,
+            "profile_form": profile_form,
+        })
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
-    template_name = "profile_form.html"
+    template_name = "profile_update.html"
     success_url = reverse_lazy("index")
 
     def get_object(self, queryset=None):
-        return Profile.objects.get(user=self.request.user)
-
-
-class ProfileCreateView(LoginRequiredMixin, CreateView):
-    model = Profile
-    fields = ["user_email", "display_name"]
-    template_name = "create_profile.html"
-    success_url = reverse_lazy("index")
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-
-@login_required
-def post_login_redirect(request):
-    """
-    Redirects user to index if profile exists.
-    Otherwise, sends them to create profile.
-    """
-    if hasattr(request.user, 'profile'):
-        return redirect('index')
-    return redirect('user_management:create_profile')
+        return self.request.user.profile  

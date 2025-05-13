@@ -19,6 +19,7 @@
         <form action="{% url 'password_reset' %}" method="get">
             <button type="submit">Forgot Password?</button>
         </form>  
+        <p>Don't have an account? <a href="{% url 'user_management:create_profile' %}">Create one here</a>.</p>
     {% else %}
         <p>You are already logged in as {{ user.username }}.</p>
     {% endif %}
