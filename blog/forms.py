@@ -11,6 +11,11 @@ class ArticleForm(forms.ModelForm):
         model = Article
         fields = ["title", "category", "entry", "header"]
 
+class ArticleImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ["header"]
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
