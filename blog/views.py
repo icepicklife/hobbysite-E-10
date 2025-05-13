@@ -75,8 +75,8 @@ class ArticleDetailView(DetailView):
         form = forms.CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.article = self.get_object()
-            comment.author_article = request.user.profile
+            comment.article = self.object
+            comment.author = request.user.profile
             comment.save()
             return redirect(self.object.get_absolute_url())
 

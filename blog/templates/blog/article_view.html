@@ -9,7 +9,7 @@
 {% block content %}
 
     {% if article.header %}
-        <img src="{{ article.header.url }}" alt="{{ article.title }} Image" style="max-width: 500px; height: auto;" />
+        <img src="{{ article.header.url }}" alt="{{ article.title }} Image" />
     {% endif %}    
     
     <h1>
@@ -29,19 +29,23 @@
     </h4>
 
     <h6>
-        <p>Created on: {{ article.created_on }}</li></p>
-        <p>Last updated: {{ article.updated_on }}</li></p>
+        <ul>
+            <li>Created on: {{ article.created_on }}</li>
+            <li>Last updated: {{ article.updated_on }}</li>
+        </ul>
     </h6>
 
     <h3>
         Other Articles by {{ article.author.user.username }}
     </h3>
-        
-    {% for related_article in more_by_author %}
-        <p><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></p>
+    <ul>
+        {% for related_article in more_by_author %}
+            <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
         {% empty %}
-        <p>No other articles by this author.</p>
-    {% endfor %}
+            <li>No other articles by this author.</li>
+        {% endfor %}
+    </ul>
+
     {% if user.is_authenticated %}
     <h3>
         Leave a Comment
@@ -62,7 +66,8 @@
         {% endif %}
         
         <p>
-            {{ comment_form.entry }}  
+            <label for="id_entry">Entry</label><br>
+            {{ comment_form.entry }}  <!-- This renders the <textarea> -->
         </p>
 
         <button type="submit" class="btn btn-primary">Submit Comment</button>
