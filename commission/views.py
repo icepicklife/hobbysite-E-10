@@ -88,7 +88,7 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
         commission = self.get_object()
         profile = get_object_or_404(Profile, user=request.user)
 
-        
+        # Owner accepting/rejecting
         if profile == commission.author:
             application_id = request.POST.get("application_id")
             action = request.POST.get("action")
@@ -105,7 +105,7 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
 
             return redirect("commission:commission_detail", pk=commission.pk)
 
-        
+        # Applicant applying
         job_id = request.POST.get("job_id")
         job = get_object_or_404(Job, pk=job_id)
 
@@ -117,9 +117,9 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
             JobApplication.objects.create(
                 job=job, applicant=profile, status="Pending", applied_on=timezone.now()
             )
-            
+            # ✅ Optional: add a message.success here
         else:
-            
+            # ✅ Optional: message.warning('You already applied')
             pass
 
         return redirect("commission:commission_detail", pk=commission.pk)
