@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['hobbysite-app-z78m7.ondigitalocean.app/']
+ALLOWED_HOSTS = ['hobbysite-app-z78m7.ondigitalocean.app']
 
 # Application definition
 
