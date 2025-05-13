@@ -15,18 +15,16 @@
     <h1>
         {{ article.title }}
     </h1>
-    
-    {% if user == article.author.user %}
-        <p><a href="{{ article.get_absolute_url }}edit/">Edit this article</a></p>
-    {% endif %}
 
     <p>
         {{ article.entry }}
     </p>
 
-    <h4>
-        <a href="{% url 'blog:article_list' %}">Go back to Article List</a>
-    </h4>
+    {% if user == article.author.user %}
+        <form action="{{ article.get_absolute_url }}edit/" method="get">
+            <button type="submit">Edit this Article</button>
+        </form>
+    {% endif %}
 
     <h6>
         <p>Created on: {{ article.created_on }}</li></p>
