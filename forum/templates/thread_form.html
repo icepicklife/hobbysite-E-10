@@ -3,11 +3,11 @@
 {% load static %}
 
 {% block title %}
-{% if object.pk %}
-    Update Thread
-{% else %}
-    Create Thread
-{% endif %}
+    {% if object.pk %}
+        Update Thread
+    {% else %}
+        Create Thread
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
     {% endif %}
 </h1>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     
     {% if form.errors %}
@@ -50,9 +50,19 @@
         {{ form.entry }}
     </p>
 
+    <p>
+        <label for="id_image">Image</label><br>
+        {{ form.image }}
+    </p>
+
+    {% if object.pk and object.image %}
+        <p>Current Image:</p>
+        <img src="{{ object.image.url }}" alt="Thread Image" style="max-width: 300px;">
+    {% endif %}
+    
     {% if object.pk %}
-        <p>{{ form.created_on }}</p>  
-        <p>{{ form.updated_on }}</p>  
+        <p>Created: {{ form.instance.created_on }}</p>  
+        <p>Last Updated: {{ form.instance.updated_on }}</p>  
     {% endif %}
     
     <p>
