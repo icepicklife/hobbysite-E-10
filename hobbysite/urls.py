@@ -36,6 +36,7 @@ urlpatterns = [
     path("wiki/", include("wiki.urls")),
     path("", include("accounts.urls", namespace="accounts")),
     path("", include("user_management.urls", namespace="user_management")),
+    path("accounts/", include("django.contrib.auth.urls"))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

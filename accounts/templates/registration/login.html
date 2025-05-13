@@ -16,6 +16,7 @@
             {{ form.as_p }}
             <button type="submit">Login</button>
         </form>
+        <a class="forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
     {% else %}
         <p>You are already logged in as {{ user.username }}.</p>
     {% endif %}

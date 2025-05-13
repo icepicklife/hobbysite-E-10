@@ -47,6 +47,16 @@ body {
     list-style: none;
   }
 
+  .forgot-password {
+    text-decoration: none;
+    color: #1e1d40;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 25px;
+  }
+
   /* from Paige other personal proj */
   
   button {
