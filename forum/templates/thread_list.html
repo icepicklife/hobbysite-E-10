@@ -23,15 +23,19 @@ Thread List
 
         <h2>Other Threads by Category</h2>
 
-        {% for category_name, threads in threads_by_category.items %}
-            {% with threads.0.category as category %}
-                <h3>{{ category.name }} <em>({{ category.description }})</em></h3>
-            {% endwith %}
+        {% if threads_by_category %}
+            {% for category_name, threads in threads_by_category.items %}
+                {% with threads.0.category as category %}
+                    <h3>{{ category.name }} <em>({{ category.description }})</em></h3>
+                {% endwith %}
 
-            {% for thread in threads %}
-                <p><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></p>
+                {% for thread in threads %}
+                    <p><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></p>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        {% else %}
+            <p>No threads from other users are available at the moment.</p>
+        {% endif %}
 
         <p>
             <a href="{{ create_thread_url }}" class="btn btn-primary">+ Create New Thread</a>
