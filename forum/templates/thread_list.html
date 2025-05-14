@@ -20,13 +20,9 @@ Thread List
                     <i>({{ group.grouper.description }})</i>
                 {% endif %}
             </h3>
-            <ul>
                 {% for thread in group.list %}
-                    <li>
-                        <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
-                    </li>
+                    <p><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></p>
                 {% endfor %}
-            </ul>
         {% endfor %}
     {% else %}
         <div class="alert alert-info">

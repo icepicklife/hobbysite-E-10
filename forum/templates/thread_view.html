@@ -9,7 +9,7 @@
 {% block content %}
 
     {% if thread.image %}
-        <img src="{{ thread.image.url }}" alt="{{ thread.title }} Image" />
+        <img src="{{ thread.image.url }}" alt="{{ thread.title }} Image" style="max-width: 500px; height: auto;" />
     {% endif %}    
     
     <h1>
@@ -29,22 +29,18 @@
     </h4>
 
     <h6>
-        <ul>
-            <li>Created on: {{ thread.created_on }}</li>
-            <li>Last updated: {{ thread.updated_on }}</li>
-        </ul>
+        <p>Created on: {{ thread.created_on }}</p>
+        <p>Last updated: {{ thread.updated_on }}</p>
     </h6>
 
     <h3>
         Other Threads by {{ thread.author.user.username }}
     </h3>
-    <ul>
-        {% for related_thread in more_by_author %}
-            <li><a href="{{ related_thread.get_absolute_url }}">{{ related_thread.title }}</a></li>
-        {% empty %}
-            <li>No other threads by this author.</li>
-        {% endfor %}
-    </ul>
+    {% for related_thread in more_by_author %}
+        <p><a href="{{ related_thread.get_absolute_url }}">{{ related_thread.title }}</a></p>
+    {% empty %}
+        <p>No other threads by this author.</p>
+    {% endfor %}
 
     {% if user.is_authenticated %}
     <h3>
