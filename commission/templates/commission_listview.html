@@ -4,16 +4,6 @@
 {% block title %}Commission List{% endblock %}
 
 {% block content %}
-    <h1>All Commissions</h1>
-    <ul class="commission-list">
-        {% for commission in commissions %}
-            <li>
-                <a href="{% url 'commission:commission_detail' commission.pk %}">
-                    {{ commission.title }} (Status: {{ commission.status }})
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
 
     {% if user.is_authenticated %}
         <h2>Your Commissions</h2>
@@ -45,4 +35,15 @@
             {% endfor %}
         </ul>
     {% endif %}
+
+    <h1>All Commissions</h1>
+    <ul class="commission-list">
+        {% for commission in commissions %}
+            <li>
+                <a href="{% url 'commission:commission_detail' commission.pk %}">
+                    {{ commission.title }} (Status: {{ commission.status }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
