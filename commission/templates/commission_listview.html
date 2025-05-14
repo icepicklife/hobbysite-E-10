@@ -13,8 +13,6 @@
                     <a href="{% url 'commission:commission_detail' commission.pk %}">
                         {{ commission.title }} (Status: {{ commission.status }})
                     </a>
-                    <a>  </a>
-                    <a href="{% url 'commission:commission_edit' commission.pk %}">Edit</a>
                 </li>
             {% empty %}
                 <li>You have not created any commissions yet.</li>
