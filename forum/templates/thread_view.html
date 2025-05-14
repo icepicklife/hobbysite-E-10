@@ -34,12 +34,12 @@
     </h6>
 
     <h3>
-        Other Threads by {{ thread.author.user.username }}
+        Other Threads in {{ thread.category.name }}
     </h3>
-    {% for related_thread in more_by_author %}
+    {% for related_thread in related_threads %}
         <p><a href="{{ related_thread.get_absolute_url }}">{{ related_thread.title }}</a></p>
     {% empty %}
-        <p>No other threads by this author.</p>
+        <p>No other threads in this category.</p>
     {% endfor %}
 
     {% if user.is_authenticated %}

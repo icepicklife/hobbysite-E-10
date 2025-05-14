@@ -51,9 +51,11 @@ class ThreadDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         thread = self.get_object()
 
-        context["more_by_author"] = models.Thread.objects.filter(
-            author=thread.author
-        ).exclude(id=thread.id)[:2]
+        related_threads = models.Thread.objects.filter(
+            category=thread.category
+        ).exclude(id=thread.id)[:2]  
+
+        context["related_threads"] = related_threads 
 
         if self.request.user.is_authenticated:
             context["comment_form"] = forms.CommentForm()
@@ -80,6 +82,7 @@ class ThreadDetailView(DetailView):
 
         context = self.get_context_data(comment_form=form)
         return self.render_to_response(context)
+
 
 
 class ThreadCreateView(LoginRequiredMixin, CreateView):
