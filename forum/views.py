@@ -88,7 +88,7 @@ class ThreadDetailView(DetailView):
 class ThreadCreateView(LoginRequiredMixin, CreateView):
     model = models.Thread
     fields = ["title", "entry", "image", "category"]
-    template_name = "Thread_form.html"
+    template_name = "thread_form.html"
     success_url = reverse_lazy("forum:thread_list")
 
     def form_valid(self, form):
