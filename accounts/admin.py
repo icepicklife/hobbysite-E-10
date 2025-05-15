@@ -20,4 +20,3 @@ class UserAccountAdmin(BaseUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAccountAdmin)
-# Register your models here.

@@ -7,16 +7,20 @@ from .forms import ProfileForm, UserForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+
 
 class CombinedCreateView(View):
     def get(self, request):
         user_form = UserForm()
         profile_form = ProfileForm()
-        return render(request, "create_profile.html", {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        })
+        return render(
+            request,
+            "create_profile.html",
+            {
+                "user_form": user_form,
+                "profile_form": profile_form,
+            },
+        )
 
     def post(self, request):
         user_form = UserForm(request.POST)
@@ -30,10 +34,6 @@ class CombinedCreateView(View):
             login(request, user)
             return redirect("index")
 
-        return render(request, "create_profile.html", {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        })
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -13,7 +13,8 @@ class ArticleListView(ListView):
     context_object_name = "unused_articles_queryset"
 
     def get_queryset(self):
-        return models.Article.objects.select_related("category", "author").all()
+        return models.Article.objects.select_related(
+            "category", "author").all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -21,18 +22,19 @@ class ArticleListView(ListView):
         queryset = self.get_queryset()
 
         if self.request.user.is_authenticated:
-            user_profile = get_object_or_404(models.Profile, user=self.request.user)
-            user_articles = queryset.filter(author=user_profile).order_by("-created_on")
+            user_profile = get_object_or_404(
+                models.Profile, user=self.request.user)
+            user_articles = queryset.filter(
+                author=user_profile).order_by("-created_on")
             other_articles = queryset.exclude(author=user_profile).order_by(
-                "category__name", "title"
-            )
+                "category__name", "title")
 
             context["user_articles"] = user_articles
 
         else:
             user_articles = None
             other_articles = queryset.order_by("category__name", "title")
-            
+
             context["user_articles"] = None
 
         articles_by_category = {}
