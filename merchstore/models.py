@@ -47,7 +47,7 @@ class Product(models.Model):
         if self.stock == 0:
             self.status = 'Out of stock'
         elif self.status == 'Out of stock' and self.stock > 0:
-            self.status = 'Available'  # Optional: reset status if restocked
+            self.status = 'Available'
         super().save(*args, **kwargs)
 
 class Transaction(models.Model):
@@ -65,9 +65,9 @@ class Transaction(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.SET_NULL, null=True, blank=True
     )
-    amount = models.PositiveIntegerField()  # Whole number (positive integer)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On cart')
-    created_on = models.DateTimeField(auto_now_add=True)  # Set when the transaction is created
+    amount = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    created_on = models.DateTimeField(auto_now_add=True) 
 
     def __str__(self):
-        return f"Transaction {self.pk} for {self.product.name if self.product else 'unknown product'}"
+        return f"Transaction {self.pk} for {self.product.name}"
