@@ -24,10 +24,13 @@ class Thread(models.Model):
     )
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
-        ThreadCategory, on_delete=models.SET_NULL, null=True, related_name="threads"
+        ThreadCategory, on_delete=models.SET_NULL,
+        null=True, related_name="threads"
     )
     entry = models.TextField()
-    image = models.ImageField(upload_to="thread_images/", blank=True, null=True)
+    image = models.ImageField(
+        upload_to="thread_images/", blank=True,
+        null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -43,7 +46,8 @@ class Thread(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, null=True, related_name="forum_comments"
+        Profile, on_delete=models.SET_NULL,
+        null=True, related_name="forum_comments"
     )
     thread = models.ForeignKey(
         Thread, on_delete=models.CASCADE, related_name="forum_comments"

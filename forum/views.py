@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -21,8 +21,10 @@ class ThreadListView(ListView):
         queryset = self.get_queryset()
 
         if self.request.user.is_authenticated:
-            user_profile = get_object_or_404(models.Profile, user=self.request.user)
-            user_threads = queryset.filter(author=user_profile).order_by("-created_on")
+            user_profile = get_object_or_404(
+                models.Profile, user=self.request.user)
+            user_threads = queryset.filter(
+                author=user_profile).order_by("-created_on")
             other_threads = queryset.exclude(author=user_profile).order_by(
                 "category__name", "title"
             )
@@ -32,7 +34,9 @@ class ThreadListView(ListView):
 
         threads_by_category = {}
         for thread in other_threads:
-            category_name = thread.category.name if thread.category else "Uncategorized"
+            category_name = (
+                thread.category.name if thread.category else "Uncategorized"
+                             )
             threads_by_category.setdefault(category_name, []).append(thread)
 
         context["user_threads"] = user_threads
@@ -53,14 +57,16 @@ class ThreadDetailView(DetailView):
 
         related_threads = models.Thread.objects.filter(
             category=thread.category
-        ).exclude(id=thread.id)[:2]  
+        ).exclude(id=thread.id)[:2]
 
-        context["related_threads"] = related_threads 
+        context["related_threads"] = related_threads
 
         if self.request.user.is_authenticated:
             context["comment_form"] = forms.CommentForm()
 
-        context["forum_comments"] = thread.forum_comments.order_by("-created_on")
+        context["forum_comments"] = thread.forum_comments.order_by(
+            "-created_on"
+            )
         context["can_edit"] = self.request.user == thread.author.user
         context["image_gallery"] = getattr(thread, "gallery_images", None)
 
@@ -82,7 +88,6 @@ class ThreadDetailView(DetailView):
 
         context = self.get_context_data(comment_form=form)
         return self.render_to_response(context)
-
 
 
 class ThreadCreateView(LoginRequiredMixin, CreateView):
