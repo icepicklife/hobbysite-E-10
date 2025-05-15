@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login
-from accounts.models import User  # Your custom user model
+from accounts.models import User
 from .models import Profile
-from .forms import ProfileForm, UserForm  # Ensure both are defined
+from .forms import ProfileForm, UserForm  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
@@ -28,7 +28,7 @@ class CombinedCreateView(View):
             profile.user = user
             profile.save()
             login(request, user)
-            return redirect("index")  # Goes straight to homepage
+            return redirect("index")
 
         return render(request, "create_profile.html", {
             "user_form": user_form,
@@ -43,3 +43,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile  
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["disable_email"] = True 
+        
+        return kwargs

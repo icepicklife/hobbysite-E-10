@@ -4,7 +4,7 @@ from .models import Product, ProductType, Transaction
 
 class ProductInline(admin.TabularInline):
     model = Product
-    extra = 0  # optional: don't show extra blank inlines
+    extra = 0
 
 
 @admin.register(ProductType)
@@ -16,7 +16,8 @@ class ProductTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "product_type", "price", "owner", "stock", "status")
+    list_display = ("name", "product_type", "price", "owner", "stock",
+                    "status")
     list_filter = ("status", "product_type")
     search_fields = ("name", "description", "owner__user__username")
 

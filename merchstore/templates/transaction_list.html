@@ -10,7 +10,7 @@
 
     {% if transactions_grouped %}
         {% for buyer, transactions in transactions_grouped %}
-            <h2>Buyer: {{ buyer.user.username }}</h2>
+            <h2>Buyer: {{ buyer.user.profile }}</h2>
             <ul>
                 {% for transaction in transactions %}
                     <li>

@@ -1,16 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Edit Product
+    {% else %}
+        Add Product
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-    <nav>
-        {% if user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
+    <h1>
+        {% if form.instance.pk %}
+            Edit Product: {{ form.instance.name }}
         {% else %}
-            <form action="{% url 'login' %}" method="get">
-                <button type="submit">Login</button>
-            </form>
+            Add New Product
         {% endif %}
-    </nav>
+    </h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        {% if stock_error %}
+            <p style="color: red;">Amount exceeds stock</p>
+        {% endif %}
+
+        <button type="submit">
+            {% if form.instance.pk %}Update{% else %}Create{% endif %}
+        </button>
+    </form>
+
+    <p><a href="{% url 'merchstore:product-list' %}">Back to product list</a></p>
 {% endblock %}

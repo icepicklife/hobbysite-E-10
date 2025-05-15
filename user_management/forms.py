@@ -14,3 +14,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["display_name", "user_email"]
+
+    def __init__(self, *args, disable_email=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        if disable_email:
+            self.fields["user_email"].disabled = True
+

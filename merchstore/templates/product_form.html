@@ -21,6 +21,11 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        
+        {% if stock_error %}
+        <p>Amount exceeds stock</p>
+        
+    {% endif %}
         <button type="submit">
             {% if form.instance.pk %}Update{% else %}Create{% endif %}
         </button>
