@@ -6,14 +6,7 @@
 
 {% block content %}
   
-  <h2>Create New Category</h2>
-  <p><em>creating a new category will refresh the page and will add the category to the drop down list below</em></p>
-  <form method="post">
-    {% csrf_token %}
-    {{ category_form.as_p }}
-    <button type="submit">Create Category</button>
-  </form>
-
+  <!-- Create Article Form  -->
   <h2>Create New Article</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
