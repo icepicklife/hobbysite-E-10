@@ -1,22 +1,25 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login
-from accounts.models import User  # Your custom user model
 from .models import Profile
-from .forms import ProfileForm, UserForm  # Ensure both are defined
+from .forms import ProfileForm, UserForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+
 
 class CombinedCreateView(View):
     def get(self, request):
         user_form = UserForm()
         profile_form = ProfileForm()
-        return render(request, "create_profile.html", {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        })
+        return render(
+            request,
+            "create_profile.html",
+            {
+                "user_form": user_form,
+                "profile_form": profile_form,
+            },
+        )
 
     def post(self, request):
         user_form = UserForm(request.POST)
@@ -28,12 +31,17 @@ class CombinedCreateView(View):
             profile.user = user
             profile.save()
             login(request, user)
-            return redirect("index")  # Goes straight to homepage
+            return redirect("index")
 
-        return render(request, "create_profile.html", {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        })
+        return render(
+            request,
+            "create_profile.html",
+            {
+                "user_form": user_form,
+                "profile_form": profile_form,
+            },
+        )
+
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
@@ -42,4 +50,4 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("index")
 
     def get_object(self, queryset=None):
-        return self.request.user.profile  
+        return self.request.user.profile

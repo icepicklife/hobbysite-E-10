@@ -17,5 +17,3 @@ class CustomProfileAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, CustomProfileAdmin)
 admin.site.register(Profile)
-
-# Register your models here.
