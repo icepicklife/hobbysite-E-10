@@ -1,16 +1,38 @@
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.utils import timezone
-from django.db.models import Sum, Case, When, Value, IntegerField
-
 from django.contrib import messages
+from django.db.models import Case, When, Value, IntegerField
+from django.utils import timezone
+from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
 
-from .models import Commission, Job, JobApplication
+from .models import Commission, Job, JobApplication, Profile
 from .forms import CommissionForm, JobFormSet, JobApplicationForm
-from user_management.models import Profile
+
+
+def update_job_and_commission_status(job):
+    # Update job status
+    accepted_count = job.jobapplication_set.filter(status="Accepted").count()
+    if accepted_count >= job.manpower_required:
+        if job.status != "Full":
+            job.status = "Full"
+            job.save()
+    else:
+        if job.status != "Open":
+            job.status = "Open"
+            job.save()
+
+    # Update commission status
+    commission = job.commission
+    if all(j.status == "Full" for j in commission.job_set.all()):
+        if commission.status != "Full":
+            commission.status = "Full"
+            commission.save()
+    else:
+        if commission.status == "Full":
+            commission.status = "Open"
+            commission.save()
 
 
 class CommissionListView(LoginRequiredMixin, ListView):
@@ -50,10 +72,7 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
         commission = self.get_object()
         jobs = commission.job_set.all()
         user = self.request.user
-        profile = None
-
-        if user.is_authenticated:
-            profile = get_object_or_404(Profile, user=user)
+        profile = get_object_or_404(Profile, user=user)
 
         manpower_info = []
         total_required = 0
@@ -74,7 +93,7 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
         context["total_required"] = total_required
         context["total_open"] = total_open
         context["application_form"] = JobApplicationForm()
-        context["is_owner"] = profile == commission.author if profile else False
+        context["is_owner"] = profile == commission.author
 
         if context["is_owner"]:
             applications = JobApplication.objects.filter(
@@ -99,10 +118,13 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
             if action == "accept":
                 application.status = "Accepted"
                 application.save()
+                update_job_and_commission_status(application.job)
             elif action == "reject":
                 application.status = "Rejected"
                 application.save()
+                update_job_and_commission_status(application.job)
 
+            update_job_and_commission_status(application.job)
             return redirect("commission:commission_detail", pk=commission.pk)
 
         # Applicant applying
@@ -117,11 +139,8 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
             JobApplication.objects.create(
                 job=job, applicant=profile, status="Pending", applied_on=timezone.now()
             )
-            # ✅ Optional: add a message.success here
-        else:
-            # ✅ Optional: message.warning('You already applied')
-            pass
 
+        update_job_and_commission_status(job)
         return redirect("commission:commission_detail", pk=commission.pk)
 
 
@@ -184,9 +203,15 @@ class CommissionUpdateView(LoginRequiredMixin, UpdateView):
             commission.save()
             formset.save()
 
-            if all(job.status == "Full" for job in commission.job_set.all()):
-                commission.status = "Full"
-                commission.save()
+            jobs = commission.job_set.all()
+            if all(job.status == "Full" for job in jobs):
+                if commission.status != "Full":
+                    commission.status = "Full"
+                    commission.save()
+            else:
+                if commission.status == "Full":
+                    commission.status = "Open"
+                    commission.save()
 
             return redirect(self.get_success_url())
 
@@ -195,7 +220,7 @@ class CommissionUpdateView(LoginRequiredMixin, UpdateView):
 
 class JobApplicationUpdateView(LoginRequiredMixin, UpdateView):
     model = JobApplication
-    form_class = JobApplication
+    form_class = JobApplicationForm
     template_name = "job_application_form.html"
     success_url = reverse_lazy("commission:commission_list")
 
@@ -209,26 +234,7 @@ class JobApplicationUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-
-        job = self.object.job
-        accepted_count = job.jobapplication_set.filter(status="Accepted").count()
-
-        if accepted_count >= job.manpower_required:
-            job.status = "Full"
-            job.save()
-        else:
-            if job.status != "Open":
-                job.status = "Open"
-                job.save()
-
-        commission = job.commission
-        if all(j.status == "Full" for j in commission.job_set.all()):
-            commission.status = "Full"
-            commission.save()
-        else:
-            if commission.status == "Full":
-                commission.status = "Open"
-                commission.save()
+        update_job_and_commission_status(self.object.job)
 
         messages.success(
             self.request, "Application has been updated and statuses auto-checked."
