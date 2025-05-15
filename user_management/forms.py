@@ -21,4 +21,3 @@ class ProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if disable_email:
             self.fields["user_email"].disabled = True
-

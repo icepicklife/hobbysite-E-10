@@ -23,7 +23,8 @@ class Article(models.Model):
         ArticleCategory, on_delete=models.SET_NULL, null=True, blank=True
     )
     entry = models.TextField()
-    header_image = models.ImageField(upload_to="wiki_headers/", null=True, blank=True)
+    header_image = models.ImageField(upload_to="wiki_headers/",
+                                     null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 

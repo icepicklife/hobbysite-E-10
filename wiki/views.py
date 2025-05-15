@@ -17,7 +17,8 @@ class ArticleListView(ListView):
     template_name = "wiki/article_list.html"
 
     def get_queryset(self):
-        return super().get_queryset().order_by("category__name", "title", "-created_on")
+        return super().get_queryset().order_by("category__name",
+                                               "title", "-created_on")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -78,7 +79,8 @@ class ArticleDetailView(FormMixin, DetailView):
         form = self.get_form()
 
         if form.is_valid():
-            if request.user.is_authenticated and hasattr(request.user, "profile"):
+            if request.user.is_authenticated and hasattr(request.user,
+                                                         "profile"):
                 comment = form.save(commit=False)
                 comment.article = self.object
                 comment.author = request.user.profile

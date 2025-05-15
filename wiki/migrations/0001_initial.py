@@ -49,7 +49,8 @@ class Migration(migrations.Migration):
                 ("entry", models.TextField()),
                 (
                     "header_image",
-                    models.ImageField(blank=True, null=True, upload_to="wiki_headers/"),
+                    models.ImageField(blank=True, null=True,
+                                      upload_to="wiki_headers/"),
                 ),
                 ("created_on", models.DateTimeField(auto_now_add=True)),
                 ("updated_on", models.DateTimeField(auto_now=True)),
@@ -94,7 +95,8 @@ class Migration(migrations.Migration):
                 (
                     "article",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="wiki.article"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="wiki.article"
                     ),
                 ),
                 (

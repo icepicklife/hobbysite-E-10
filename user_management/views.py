@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login
-from accounts.models import User
 from .models import Profile
-from .forms import ProfileForm, UserForm  
+from .forms import ProfileForm, UserForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
@@ -42,10 +41,10 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("index")
 
     def get_object(self, queryset=None):
-        return self.request.user.profile  
-    
+        return self.request.user.profile
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["disable_email"] = True 
-        
+        kwargs["disable_email"] = True
+
         return kwargs
