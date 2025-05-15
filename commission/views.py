@@ -12,7 +12,6 @@ from .forms import CommissionForm, JobFormSet, JobApplicationForm
 
 
 def update_job_and_commission_status(job):
-    # Update job status
     accepted_count = job.jobapplication_set.filter(status="Accepted").count()
     if accepted_count >= job.manpower_required:
         if job.status != "Full":
@@ -23,7 +22,6 @@ def update_job_and_commission_status(job):
             job.status = "Open"
             job.save()
 
-    # Update commission status
     commission = job.commission
     if all(j.status == "Full" for j in commission.job_set.all()):
         if commission.status != "Full":
@@ -56,7 +54,8 @@ class CommissionListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             profile = get_object_or_404(Profile, user=self.request.user)
-            context["user_commissions"] = Commission.objects.filter(author=profile)
+            context["user_commissions"] = Commission.objects.filter(
+                author=profile)
             context["applied_commissions"] = Commission.objects.filter(
                 job__jobapplication__applicant=profile
             ).distinct()
@@ -83,7 +82,8 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
                 job.manpower_required
                 - job.jobapplication_set.filter(status="Accepted").count()
             )
-            already_applied = job.jobapplication_set.filter(applicant=profile).exists()
+            already_applied = job.jobapplication_set.filter(
+                applicant=profile).exists()
             can_apply = open_slots > 0 and not already_applied
             manpower_info.append((job, open_slots, can_apply))
             total_required += job.manpower_required
@@ -137,7 +137,10 @@ class CommissionDetailView(LoginRequiredMixin, DetailView):
 
         if not existing_application:
             JobApplication.objects.create(
-                job=job, applicant=profile, status="Pending", applied_on=timezone.now()
+                job=job,
+                applicant=profile,
+                status="Pending",
+                applied_on=timezone.now()
             )
 
         update_job_and_commission_status(job)
@@ -153,7 +156,11 @@ class CommissionCreateView(LoginRequiredMixin, CreateView):
     def get(self, request, *args, **kwargs):
         form = CommissionForm()
         formset = JobFormSet()
-        return render(request, self.template_name, {"form": form, "formset": formset})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "formset": formset}
+        )
 
     def post(self, request, *args, **kwargs):
         form = CommissionForm(request.POST)
@@ -173,7 +180,11 @@ class CommissionCreateView(LoginRequiredMixin, CreateView):
 
             return redirect("commission:commission_list")
 
-        return render(request, self.template_name, {"form": form, "formset": formset})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "formset": formset}
+        )
 
 
 class CommissionUpdateView(LoginRequiredMixin, UpdateView):
@@ -190,7 +201,11 @@ class CommissionUpdateView(LoginRequiredMixin, UpdateView):
         self.object = self.get_object()
         form = self.get_form()
         formset = JobFormSet(instance=self.object)
-        return render(request, self.template_name, {"form": form, "formset": formset})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "formset": formset}
+        )
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -215,7 +230,11 @@ class CommissionUpdateView(LoginRequiredMixin, UpdateView):
 
             return redirect(self.get_success_url())
 
-        return render(request, self.template_name, {"form": form, "formset": formset})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "formset": formset}
+        )
 
 
 class JobApplicationUpdateView(LoginRequiredMixin, UpdateView):
@@ -237,6 +256,7 @@ class JobApplicationUpdateView(LoginRequiredMixin, UpdateView):
         update_job_and_commission_status(self.object.job)
 
         messages.success(
-            self.request, "Application has been updated and statuses auto-checked."
+            self.request,
+            "Application has been updated and statuses auto-checked."
         )
         return response

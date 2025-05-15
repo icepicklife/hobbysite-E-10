@@ -16,7 +16,10 @@ class Commission(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     description = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_STATES, default="Open")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_STATES,
+        default="Open")
     created_on = models.DateTimeField(
         auto_now_add=True,
     )
@@ -41,10 +44,15 @@ class Job(models.Model):
         ("Full", "Full"),
     ]
 
-    commission = models.ForeignKey(Commission, on_delete=models.CASCADE)
+    commission = models.ForeignKey(
+        Commission,
+        on_delete=models.CASCADE)
     role = models.CharField(max_length=255)
     manpower_required = models.PositiveIntegerField()
-    status = models.CharField(max_length=20, choices=STATUS_STATES, default="Open")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_STATES,
+        default="Open")
 
     class Meta:
         ordering = ["status", "-manpower_required", "role"]
@@ -66,7 +74,10 @@ class JobApplication(models.Model):
         on_delete=models.CASCADE,
     )
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=STATUS_STATES, default="Pending")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_STATES,
+        default="Pending")
     applied_on = models.DateTimeField(
         auto_now_add=True,
     )
