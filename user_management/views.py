@@ -32,6 +32,15 @@ class CombinedCreateView(View):
             profile.save()
             login(request, user)
             return redirect("index")
+        else:
+            return render(
+                request,
+                "create_profile.html",
+                {
+                    "user_form": user_form,
+                    "profile_form": profile_form,
+                },
+            )
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
